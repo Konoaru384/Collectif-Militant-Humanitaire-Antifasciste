@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CMHA - Membres & Collectifs</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+</head>
+<body>
+
+<header>
+    <img src="assets/logo.png" alt="Logo CMHA" style="width: 100px;">
+        <br>
+    <nav>
+        <a href="index.html">Accueil</a>
+        <a href="faq.html">FAQ</a>
+        <a href="actions.html">Actions</a>
+        <a href="membres.html" class="active">Membres & Collectifs</a>
+        <a href="#" onclick="startRedirection()">Shop & Don</a>
+                <a href="rejoindre.html">Nous Rejoindre / Nous Contacter</a>
+    </nav>
+</header>
+
+<div class="container" style="display: block;">
+    <h1 style="text-align: center;">Carte de nos collectifs</h1>
+    
+    <div id="map"></div>
+
+    <div class="collectif-details" id="colomiers-details">
+        <div class="collectif-info">
+            <img src="assets/logo.png" alt="Logo Colomiers" class="collectif-logo">
+            
+            <div class="collectif-details-text">
+                <h2 style="margin-top:0;">Colomiers</h2>
+                <h3 style="color:#5f6368;">Collectif Millitant Humanitaire antifacsiste colomiers</h3>
+                <p><strong>Description :</strong> Centre du CMHA, operant a Colomiers...</p>
+                <p><strong>Réseaux et info :</strong>             <a href="https://www.youtube.com/@CMHA31">YouTube,</a>
+            <a href="https://www.instagram.com/p/DW4HcVOD4FD/">Instagram,</a>
+            <a href="https://www.tiktok.com/@cmhantifacsiste/video/7626422856934624534">TikTok,</a>
+            <a href="https://discord.com/invite/DFrY7fwmaU">Discord,</a>
+            <a href="https://actionpopulaire.fr/groupes/d09eb815-b523-4004-b536-73023dfc4c41/">Action Populaire,</a>
+            <a href="https://ko-fi.com/cmha31">Ko-fi (Donation et Shop).</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="shop-overlay" class="overlay">
+    <h2>Redirection en cours vers le shop...</h2>
+    <p id="countdown" style="font-size: 3rem; font-weight: bold;">5</p>
+    <button onclick="cancelRedirection()" style="padding: 10px 20px; cursor:pointer;">Annuler</button>
+</div>
+
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script>
+    // Vue centrée sur la France par défaut
+    var map = L.map('map').setView([46.603, 1.888], 5); 
+
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
+        attribution: '© CartoDB'
+    }).addTo(map);
+
+    var customIcon = L.icon({
+        iconUrl: 'assets/logo.png',
+        iconSize: [40, 40],
+        iconAnchor: [20, 20]
+    });
+
+    // Marqueur Colomiers
+    var colomiersMarker = L.marker([43.612, 1.332], {icon: customIcon}).addTo(map);
+    colomiersMarker.bindPopup('<b>Collectif CMHA - Colomiers</b><br><a href="#colomiers-details">Voir détails</a>');
+</script>
+<script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>CMHA - FAQ</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+    <img src="assets/logo.png" alt="Logo CMHA" style="width: 100px;">
+        <br>
+    <nav>
+        <a href="index.html">Accueil</a>
+        <a href="faq.html" class="active">FAQ</a>
+        <a href="actions.html">Actions</a>
+        <a href="membres.html">Membres & Collectifs</a>
+        <a href="#" onclick="startRedirection()">Shop & Don</a>
+                <a href="rejoindre.html">Nous Rejoindre / Nous Contacter</a>
+    </nav>
+</header>
+
+<div class="container">
+    <main class="main-content">
+        <article class="post">
+            <div class="post-content">
+                <h2>Qui sommes-nous ?</h2>
+                Le CMHA (ou Collectif Militant Humanitaire Antifasciste) est un collectif opérant en France (principalement en Haute-Garonne).<br><br>
+Nous sommes une association de fait (soit un collectif idéologique militant pour le programme de l'avenir en commun),<br><br>
+Il est née de la nécessité de combattre la montée de l'extrême droite par l'action concrète,<br><br>
+la distribution d'informations et la solidarité directe avec les opprimés.<br>
+            </div>
+        </article>
+
+
+    </main>
+
+    <aside class="sidebar">
+        <h3>Suivez-nous</h3>
+        <div class="social-links">
+            <a href="https://www.youtube.com/@CMHA31">YouTube</a>
+            <a href="https://www.instagram.com/p/DW4HcVOD4FD/">Instagram</a>
+            <a href="https://www.tiktok.com/@cmhantifacsiste/video/7626422856934624534">TikTok</a>
+            <a href="https://discord.com/invite/DFrY7fwmaU">Discord</a>
+            <a href="https://actionpopulaire.fr/groupes/d09eb815-b523-4004-b536-73023dfc4c41/">Action Populaire</a>
+            <a href="https://ko-fi.com/cmha31">Ko-fi (Donation et Shop)</a>
+        </div>
+    </aside>
+</div>
+
+<div id="shop-overlay" class="overlay">
+    <div class="overlay-content">
+        <h2>Redirection en cours vers le shop...</h2>
+        <p id="countdown">5</p>
+        <button onclick="cancelRedirection()" class="btn-cancel">Annuler</button>
+    </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
