@@ -22,3 +22,20 @@ function cancelRedirection() {
     clearInterval(timer);
     document.getElementById('shop-overlay').style.display = 'none';
 }
+function openLightbox(src) {
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightbox-img');
+    lightbox.style.display = 'flex';
+    lightboxImg.src = src;
+}
+
+function closeLightbox() {
+    document.getElementById('lightbox').style.display = 'none';
+}
+
+document.addEventListener('click', function(event) {
+    const lightbox = document.getElementById('lightbox');
+    if (event.target === lightbox) {
+        closeLightbox();
+    }
+});
