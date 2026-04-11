@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>CMHA - Article</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+    <img src="assets/logo.png" alt="Logo CMHA" style="width: 100px;">
+        <br>
+    <nav>
+        <a href="index.html">Accueil</a>
+        <a href="faq.html">FAQ</a>
+        <a href="actions.html">Actions</a>
+        <a href="membres.html">Membres & Collectifs</a>
+        <a href="#" onclick="startRedirection()">Shop & Don</a>
+                <a href="rejoindre.html">Nous Rejoindre / Nous Contacter</a>
+    </nav>
+</header>
+
+<div class="container">
+    <main class="main-content">
+        <article class="post">
+            <img src="https://assets.change.org/photos/7/pu/ae/nMPUAebHUbTxpAf-800x450-noPad.jpg?1771554272" alt="Bannière article" class="article-banner">
+            <div class="post-content">
+                <span class="post-meta">11 avril 2026 par : Collectif Millitant Humanitaire antifacsiste</span>
+                <h2>NEMESIS DISSOLUTION !</h2>
+                <P>
+                Bonsoir à tous,<br><br>
+                Nous vous partageons à toutes et à tous cette pétition : <a href="https://c.org/JTQLMjhM4d" target="_blank">https://c.org/JTQLMjhM4d</a>
+                <br>
+Elle vise à demander la dissolution du collectif Némésis, un groupe qui s’est montré dangereux, notamment à travers sa garde rapprochée d’orientation néofasciste, liée à des groupes impliqués dans des violences ayant conduit à la mort de militants antifascistes.
+<br><br>De plus, ce collectif s’est illustré par des positions mensongères, racistes et ouvertement fascistes, notamment à travers sa fondatrice Alice Cordier, militante néonazie ayant réalisé des signes SS sur une photo. L’Humanité a révélé la réalité de ce groupe dans son enquête (voir : <a href="https://www.youtube.com/watch?v=lhIB0Fnlqeo" target="_blank">https://www.youtube.com/watch?v=lhIB0Fnlqeo</a>).
+<br>
+<div class="video-container">
+                    <iframe width="100%" height="400" src="https://www.youtube.com/embed/lhIB0Fnlqeo?si=yKpdZb09tPS0x0TP" frameborder="0" allowfullscreen></iframe>
+                </div>               
+</P>
+            </div>
+        </article>
+    </main>
+
+    <aside class="sidebar">
+        <h3>Suivez-nous</h3>
+        <div class="social-links">
+            <a href="https://www.youtube.com/@CMHA31">YouTube</a>
+            <a href="https://www.instagram.com/p/DW4HcVOD4FD/">Instagram</a>
+            <a href="https://www.tiktok.com/@cmhantifacsiste/video/7626422856934624534">TikTok</a>
+            <a href="https://discord.com/invite/DFrY7fwmaU">Discord</a>
+            <a href="https://actionpopulaire.fr/groupes/d09eb815-b523-4004-b536-73023dfc4c41/">Action Populaire</a>
+            <a href="https://ko-fi.com/cmha31">Ko-fi (Donation et Shop)</a>
+        </div>
+
+        <h3 style="margin-top: 30px;">Derniers articles</h3>
+        <ul class="last-posts">
+            <li>
+                                <a href="nemesisdis.html">NEMESIS DISSOLUTION !</a>
+                <span>11/04/2026</span>
+                <a href="majsite.html">Mise A Jour du site.</a>
+                <span>10/04/2026</span>
+            </li>
+        </ul>
+    </aside>
+</div>
+
+<div id="shop-overlay" class="overlay">
+    <div class="overlay-content">
+        <h2>Redirection en cours vers le shop...</h2>
+        <p id="countdown">5</p>
+        <button onclick="cancelRedirection()" class="btn-cancel">Annuler</button>
+    </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
