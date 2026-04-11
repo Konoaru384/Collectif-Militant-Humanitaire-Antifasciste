@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>CMHA - Article</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+    <img src="assets/logo.png" alt="Logo CMHA" style="width: 100px;">
+        <br>
+    <nav>
+        <a href="index.html">Accueil</a>
+        <a href="faq.html">FAQ</a>
+        <a href="actions.html">Actions</a>
+        <a href="membres.html">Membres & Collectifs</a>
+        <a href="#" onclick="startRedirection()">Shop & Don</a>
+                <a href="rejoindre.html">Nous Rejoindre / Nous Contacter</a>
+    </nav>
+</header>
+
+<div class="container">
+<main class="main-content">
+    <article class="post">
+        <img src="assets/image-210.png" 
+             alt="Bannière action" 
+             class="article-banner">
+
+        <div class="post-content">
+            <span class="post-meta">9 avril 2026 par : Collectif Militant Humanitaire Antifasciste</span>
+
+            <h2>Achat de 500 stickers antifascistes</h2>
+
+            <p>Nous informons que nous allons recevoir le 29 avril 500 stickers antifascistes.</p>
+            <p>Nous les collerons dans les rues de Colomiers et de ses environs pour sensibiliser les gens aux dangers du fascisme et pour promouvoir nos idées de solidarité et d’égalité.</p>
+        </div>
+    </article>
+</main>
+
+
+    <aside class="sidebar">
+        <h3>Suivez-nous</h3>
+        <div class="social-links">
+            <a href="https://www.youtube.com/@CMHA31">YouTube</a>
+            <a href="https://www.instagram.com/p/DW4HcVOD4FD/">Instagram</a>
+            <a href="https://www.tiktok.com/@cmhantifacsiste/video/7626422856934624534">TikTok</a>
+            <a href="https://discord.com/invite/DFrY7fwmaU">Discord</a>
+            <a href="https://actionpopulaire.fr/groupes/d09eb815-b523-4004-b536-73023dfc4c41/">Action Populaire</a>
+            <a href="https://ko-fi.com/cmha31">Ko-fi (Donation et Shop)</a>
+        </div>
+
+        <h3 style="margin-top: 30px;">Derniers articles</h3>
+        <ul class="last-posts">
+            <li>
+                
+                                                <a href="nemesisdis.html">NEMESIS DISSOLUTION !</a>
+                <span>11/04/2026</span>
+                <a href="majsite.html">Mise A Jour du site.</a>
+                <span>10/04/2026</span>
+                                                                <a href="stickers5001.html">Achat de 500 stickers antifascistes.</a>
+                <span>9/04/2026</span>
+            </li>
+        </ul>
+    </aside>
+</div>
+
+<div id="shop-overlay" class="overlay">
+    <div class="overlay-content">
+        <h2>Redirection en cours vers le shop...</h2>
+        <p id="countdown">5</p>
+        <button onclick="cancelRedirection()" class="btn-cancel">Annuler</button>
+    </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
