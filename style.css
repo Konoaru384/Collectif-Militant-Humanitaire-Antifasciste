@@ -250,3 +250,255 @@ nav a.active, nav a:hover {
 .collectif-details-text {
     flex: 1;
 }
+
+.wiki-page {
+    font-family: sans-serif;
+    font-size: 1.05em;
+    color: #202124;
+    line-height: 1.6;
+}
+
+.wiki-page h1 {
+    font-size: 2.2em;
+    font-family: "Linux Libertine", "Georgia", "Times", serif;
+    border-bottom: 1px solid #a2a9b1;
+    padding-bottom: 5px;
+    margin-bottom: 20px;
+    font-weight: normal;
+}
+
+.wiki-page h2 {
+    font-size: 1.6em;
+    font-family: "Linux Libertine", "Georgia", "Times", serif;
+    border-bottom: 1px solid #a2a9b1;
+    padding-bottom: 5px;
+    margin-top: 35px;
+    margin-bottom: 15px;
+    font-weight: normal;
+    overflow: hidden; 
+}
+
+.wiki-page h3 {
+    font-size: 1.2em;
+    margin-top: 25px;
+    margin-bottom: 10px;
+    font-weight: bold;
+    overflow: hidden; 
+}
+
+.wiki-page p {
+    margin-bottom: 15px;
+    text-align: justify;
+}
+
+.wiki-page blockquote {
+    background: #f8f9fa;
+    border-left: 4px solid #eaecf0;
+    padding: 10px 20px;
+    margin: 20px 0;
+    font-style: italic;
+    color: #202124;
+}
+
+.text-small {
+    font-size: 0.85em;
+    color: #54595d;
+}
+
+.clearfix::after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+.clear-floats {
+    clear: both;
+}
+
+.size-sm { max-width: 200px; }
+.size-md { max-width: 250px; }
+.size-lg { max-width: 300px; }
+.size-xl { max-width: 340px; }
+
+.infobox {
+    float: right;
+    width: 320px;
+    background-color: #f8f9fa;
+    border: 1px solid #a2a9b1;
+    margin: 0 0 20px 20px;
+    padding: 5px;
+    font-size: 0.9em;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.infobox-header {
+    background-color: #8c0000;
+    color: white;
+    text-align: center;
+    font-weight: bold;
+    padding: 8px;
+    font-size: 1.1em;
+    margin-bottom: 10px;
+}
+
+.infobox img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto 10px auto;
+}
+
+.zoomable {
+    cursor: zoom-in;
+    transition: opacity 0.2s;
+}
+
+.zoomable:hover {
+    opacity: 0.9;
+}
+
+.infobox table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.infobox th {
+    text-align: left;
+    vertical-align: top;
+    padding: 6px;
+    width: 35%;
+    border-top: 1px solid #eaecf0;
+    color: #202124;
+}
+
+.infobox td {
+    vertical-align: top;
+    padding: 6px;
+    border-top: 1px solid #eaecf0;
+}
+
+.wiki-figure {
+    background: #f8f9fa;
+    border: 1px solid #c8ccd1;
+    padding: 3px;
+    text-align: center;
+}
+
+.wiki-figure img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    border: 1px solid #c8ccd1;
+}
+
+.wiki-figcaption {
+    font-size: 0.85em;
+    padding: 6px 4px 4px 4px;
+    color: #202124;
+    text-align: left;
+    line-height: 1.4;
+}
+
+.figure-left {
+    float: left;
+    margin: 10px 20px 15px 0;
+}
+
+.figure-right {
+    float: right;
+    margin: 10px 0 15px 20px;
+}
+
+.figure-center {
+    display: block;
+    margin: 20px auto;
+}
+
+.wiki-gallery {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: 20px 0;
+    clear: both;
+}
+
+.wiki-event {
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 1px dashed #eaecf0;
+}
+
+.wiki-event:last-child {
+    border-bottom: none;
+}
+
+@media (max-width: 768px) {
+    .infobox {
+        float: none;
+        width: 100%;
+        margin: 0 0 20px 0;
+    }
+    
+    .figure-left, .figure-right {
+        float: none;
+        width: 100%;
+        max-width: 100%;
+        margin: 20px 0;
+    }
+
+    .wiki-gallery {
+        flex-direction: column;
+        align-items: center;
+    }
+}
+.event-flex {
+    display: flex;
+    align-items: center; 
+    gap: 30px;
+    margin-bottom: 30px;
+}
+
+.event-text {
+    flex: 1; 
+}
+
+.flex-reverse {
+    flex-direction: row-reverse;
+}
+
+.lightbox {
+    display: none; 
+    position: fixed;
+    z-index: 1000;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
+    justify-content: center;
+    align-items: center;
+}
+
+.lightbox-content {
+    max-width: 90%;
+    max-height: 85%;
+    border: 3px solid white;
+}
+
+.lightbox-close {
+    position: absolute;
+    top: 20px;
+    right: 35px;
+    color: white;
+    font-size: 40px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+@media (max-width: 768px) {
+    .event-flex, .flex-reverse {
+        flex-direction: column-reverse;
+        text-align: center;
+    }
+}
