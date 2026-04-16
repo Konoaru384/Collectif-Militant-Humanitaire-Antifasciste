@@ -29,7 +29,7 @@
 
     <div class="collectif-details" id="colomiers-details">
         <div class="collectif-info">
-            <img src="assets/logo.png" alt="Logo Colomiers" class="collectif-logo">
+            <img src="assets/logocolomiers.png" alt="Logo Colomiers" class="collectif-logo">
             
             <div class="collectif-details-text">
                 <h2 style="margin-top:0;">Colomiers</h2>
@@ -42,6 +42,24 @@
             <a href="https://actionpopulaire.fr/groupes/d09eb815-b523-4004-b536-73023dfc4c41/">Action Populaire,</a>
             <a href="https://ko-fi.com/cmha31">Ko-fi (Donation et Shop).</a></p>
             </div>
+            <div class="collectif-details-text">
+    <img src="assets/logolegeuvin.png" alt="Logo Léguevin" class="collectif-logo">
+
+    <h2 style="margin-top:0;">Léguevin</h2>
+    <h3 style="color:#5f6368;">Collectif Militant Humanitaire Antifasciste – Léguevin</h3>
+
+    <p><strong>Description :</strong> Collectif CMHA actif à Léguevin et dans les communes voisines.</p>
+
+    <p><strong>Réseaux et info :</strong>
+        <a href="https://www.youtube.com/@CMHA31">YouTube,</a>
+        <a href="https://www.instagram.com/p/DW4HcVOD4FD/">Instagram,</a>
+        <a href="https://www.tiktok.com/@cmhantifacsiste/video/7626422856934624534">TikTok,</a>
+        <a href="https://discord.com/invite/DFrY7fwmaU">Discord,</a>
+        <a href="https://actionpopulaire.fr/groupes/d09eb815-b523-4004-b536-73023dfc4c41/">Action Populaire,</a>
+        <a href="https://ko-fi.com/cmha31">Ko-fi (Donation et Shop).</a>
+    </p>
+</div>
+
         </div>
     </div>
 </div>
@@ -61,13 +79,26 @@
     }).addTo(map);
 
     var customIcon = L.icon({
-        iconUrl: 'assets/logo.png',
+        iconUrl: 'assets/logocolomiers.png',
         iconSize: [40, 40],
         iconAnchor: [20, 20]
     });
 
     var colomiersMarker = L.marker([43.612, 1.332], {icon: customIcon}).addTo(map);
+
+    
     colomiersMarker.bindPopup('<b>Collectif CMHA - Colomiers</b><br><a href="#colomiers-details">Voir détails</a>');
+
+
+    var legeuvinIcon = L.icon({
+    iconUrl: 'assets/logolegeuvin.png',
+    iconSize: [40, 40],
+    iconAnchor: [20, 20]
+});
+
+var legeuvinMarker = L.marker([43.614, 1.235], {icon: legeuvinIcon}).addTo(map);
+legeuvinMarker.bindPopup('<b>Collectif CMHA - Léguevin</b><br><a href="#colomiers-details">Voir détails</a>');
+
 </script>
 <script src="script.js"></script>
 </body>
