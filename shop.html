@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CMHA - Boutique & Don</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header id="site-header"></header>
+
+<div class="container" style="display: block;">
+    <h1 style="text-align: center;">Boutique</h1>
+    <p style="text-align: center; color: #5f6368; max-width: 700px; margin: 0 auto 30px auto;">
+        Tous les articles sont produits et expédiés via Ko-fi. La commande finale se fait sur Ko-fi, en toute sécurité.
+    </p>
+
+    <div id="shop-tabs" class="shop-tabs"></div>
+
+    <div id="shop-body"></div>
+</div>
+
+<div id="product-modal" class="product-modal">
+    <div class="product-modal-content">
+        <span id="modal-close" class="modal-close">&times;</span>
+        <div class="modal-carousel">
+            <div id="modal-arrows" class="modal-arrows">
+                <button id="modal-prev" class="modal-arrow-btn">&#10094;</button>
+                <button id="modal-next" class="modal-arrow-btn">&#10095;</button>
+            </div>
+            <img id="modal-image" class="modal-image" src="" alt="">
+            <div id="modal-dots" class="modal-dots"></div>
+        </div>
+        <h2 id="modal-title"></h2>
+        <p id="modal-description" class="modal-description"></p>
+        <p id="modal-price" class="modal-price-tag"></p>
+        <a id="modal-order-link" href="#" target="_blank" rel="noopener" class="btn-order">Commander sur Ko-fi</a>
+    </div>
+</div>
+
+<script src="data/articles.js"></script>
+<script src="data/shop.js"></script>
+<script src="js/site.js"></script>
+<script src="js/shop.js"></script>
+</body>
+</html>
