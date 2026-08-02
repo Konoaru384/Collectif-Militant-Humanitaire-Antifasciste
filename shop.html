@@ -70,8 +70,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 
-// Détection automatique de catégorie (Affiche/Stickers, Stickers, Personnalisé)
-// selon les mots-clés présents dans le titre de chaque produit du widget Ko-fi.tools.
+
 (function () {
     const embed = document.getElementById("kofi-shop-embed");
     const catTabs = document.querySelectorAll("#shop-category-tabs .shop-tab");
@@ -93,8 +92,7 @@ document.addEventListener("DOMContentLoaded", () => {
         return "autre";
     }
 
-    // Trouve, pour chaque image du widget, la "carte produit" englobante :
-    // le plus petit ancêtre qui a plusieurs frères de même nature (liste répétée).
+
     function findCard(img) {
         let el = img;
         for (let i = 0; i < 6 && el && el.parentElement; i++) {
@@ -135,8 +133,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    // Le widget charge ses produits de façon asynchrone : on observe le DOM
-    // et on retague à chaque changement (nouveaux produits, tri, etc.).
     const observer = new MutationObserver(() => {
         tagCards();
         applyFilter(currentCategory);
