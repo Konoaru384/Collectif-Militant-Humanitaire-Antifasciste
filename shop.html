@@ -30,7 +30,7 @@ Notre boutique, l'argent récoltée finance le collectif.    </p>
     <div id="panel-shop" class="shop-panel">
         <div id="shop-category-tabs" class="shop-tabs" style="margin-bottom: 15px;">
             <button class="shop-tab active" data-category="all">Tout</button>
-            <button class="shop-tab" data-category="affiche-stickers">Affiche/Stickers</button>
+            <button class="shop-tab" data-category="posters">Posters</button>
             <button class="shop-tab" data-category="stickers">Stickers</button>
             <button class="shop-tab" data-category="personnalise">Personnalisé</button>
         </div>
@@ -84,8 +84,8 @@ document.addEventListener("DOMContentLoaded", () => {
         const hasSticker = t.includes("sticker");
         const hasPerso = t.includes("personnalis") || t.includes("commission") || t.includes("sur mesure");
         if (hasPerso) return "personnalise";
-        if (hasAffiche && hasSticker) return "affiche-stickers";
-        if (hasAffiche) return "affiche-stickers";
+        if (hasAffiche && hasSticker) return "posters";
+        if (hasAffiche) return "posters";
         if (hasSticker) return "stickers";
         return "autre";
     }
