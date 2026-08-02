@@ -80,7 +80,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function detectCategory(text) {
         const t = normalize(text);
-        const hasAffiche = t.includes("affiche");
+        const hasAffiche = t.includes("poster");
         const hasSticker = t.includes("sticker");
         const hasPerso = t.includes("personnalis") || t.includes("commission") || t.includes("sur mesure");
         if (hasPerso) return "personnalise";
