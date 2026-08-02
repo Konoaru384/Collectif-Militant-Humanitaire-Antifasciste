@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CMHA - Boutique & Don</title>
     <link rel="stylesheet" href="style.css">
+    <script defer src="https://cdn.ko-fi.tools/v2/js/shop.js"></script>
+    <script defer src="https://cdn.ko-fi.tools/v2/js/commissions.js"></script>
 </head>
 <body>
 
@@ -12,36 +14,137 @@
 
 <div class="container" style="display: block;">
     <h1 style="text-align: center;">Boutique</h1>
-    <p style="text-align: center; color: #5f6368; max-width: 700px; margin: 0 auto 30px auto;">
+    <p style="text-align: center; color: #5f6368; max-width: 700px; margin: 0 auto 20px auto;">
         Tous les articles sont produits et expédiés via Ko-fi. La commande finale se fait sur Ko-fi, en toute sécurité.
+        Cette page se met à jour automatiquement dès qu'un article est ajouté, modifié ou retiré sur notre Ko-fi.
     </p>
 
-    <div id="shop-tabs" class="shop-tabs"></div>
+    <p style="text-align: center; margin-bottom: 30px;">
+        <a href="https://ko-fi.com/cmha31/shop" target="_blank" rel="noopener" class="btn-order">Voir toute la boutique sur Ko-fi</a>
+    </p>
 
-    <div id="shop-body"></div>
-</div>
+    <div id="shop-tabs" class="shop-tabs">
+        <button class="shop-tab active" data-panel="panel-shop">Boutique</button>
+        <button class="shop-tab" data-panel="panel-commissions">Commandes personnalisées</button>
+        <button class="shop-tab" data-panel="panel-don">Faire un don</button>
+    </div>
 
-<div id="product-modal" class="product-modal">
-    <div class="product-modal-content">
-        <span id="modal-close" class="modal-close">&times;</span>
-        <div class="modal-carousel">
-            <div id="modal-arrows" class="modal-arrows">
-                <button id="modal-prev" class="modal-arrow-btn">&#10094;</button>
-                <button id="modal-next" class="modal-arrow-btn">&#10095;</button>
-            </div>
-            <img id="modal-image" class="modal-image" src="" alt="">
-            <div id="modal-dots" class="modal-dots"></div>
+    <div id="panel-shop" class="shop-panel">
+        <div id="shop-category-tabs" class="shop-tabs" style="margin-bottom: 15px;">
+            <button class="shop-tab active" data-category="all">Tout</button>
+            <button class="shop-tab" data-category="affiche-stickers">Affiche/Stickers</button>
+            <button class="shop-tab" data-category="stickers">Stickers</button>
+            <button class="shop-tab" data-category="personnalise">Personnalisé</button>
         </div>
-        <h2 id="modal-title"></h2>
-        <p id="modal-description" class="modal-description"></p>
-        <p id="modal-price" class="modal-price-tag"></p>
-        <a id="modal-order-link" href="#" target="_blank" rel="noopener" class="btn-order">Commander sur Ko-fi</a>
+        <div id="kofi-shop-embed" data-shop-id="O5O11XGRHF" data-shop-currency="€" data-shop-theme="default" data-shop-soldout="show"></div>
+    </div>
+
+    <div id="panel-commissions" class="shop-panel" style="display: none;">
+        <div id="kofi-commissions-embed" data-commissions-id="O5O11XGRHF" data-commissions-currency="€" data-commissions-theme="default"></div>
+    </div>
+
+    <div id="panel-don" class="shop-panel" style="display: none;">
+        <div class="donate-panel">
+            <h2>Soutenez le CMHA</h2>
+            <p>Chaque don nous permet de financer nos actions : impressions, stickers, déplacements et matériel militant.</p>
+            <iframe id="kofiframe" src="https://ko-fi.com/cmha31/?hidefeed=true&widget=true&embed=true&preview=true" style="border:none;width:100%;padding:4px;background:#f9f9f9;" height="712" title="cmha31"></iframe>
+        </div>
     </div>
 </div>
 
 <script src="data/articles.js"></script>
-<script src="data/shop.js"></script>
 <script src="js/site.js"></script>
-<script src="js/shop.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const tabs = document.querySelectorAll("#shop-tabs .shop-tab");
+    const panels = document.querySelectorAll(".shop-panel");
+    tabs.forEach(tab => {
+        tab.addEventListener("click", () => {
+            tabs.forEach(t => t.classList.remove("active"));
+            tab.classList.add("active");
+            const target = tab.getAttribute("data-panel");
+            panels.forEach(p => {
+                p.style.display = p.id === target ? "block" : "none";
+            });
+        });
+    });
+});
+
+// Détection automatique de catégorie (Affiche/Stickers, Stickers, Personnalisé)
+// selon les mots-clés présents dans le titre de chaque produit du widget Ko-fi.tools.
+(function () {
+    const embed = document.getElementById("kofi-shop-embed");
+    const catTabs = document.querySelectorAll("#shop-category-tabs .shop-tab");
+    if (!embed || !catTabs.length) return;
+
+    function normalize(str) {
+        return str.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    }
+
+    function detectCategory(text) {
+        const t = normalize(text);
+        const hasAffiche = t.includes("affiche");
+        const hasSticker = t.includes("sticker");
+        const hasPerso = t.includes("personnalis") || t.includes("commission") || t.includes("sur mesure");
+        if (hasPerso) return "personnalise";
+        if (hasAffiche && hasSticker) return "affiche-stickers";
+        if (hasAffiche) return "affiche-stickers";
+        if (hasSticker) return "stickers";
+        return "autre";
+    }
+
+    // Trouve, pour chaque image du widget, la "carte produit" englobante :
+    // le plus petit ancêtre qui a plusieurs frères de même nature (liste répétée).
+    function findCard(img) {
+        let el = img;
+        for (let i = 0; i < 6 && el && el.parentElement; i++) {
+            const parent = el.parentElement;
+            const siblings = Array.from(parent.children).filter(c => c.tagName === el.tagName);
+            if (siblings.length > 1) return el;
+            el = parent;
+        }
+        return img.parentElement || img;
+    }
+
+    function tagCards() {
+        const imgs = embed.querySelectorAll("img");
+        if (!imgs.length) return false;
+        imgs.forEach(img => {
+            const card = findCard(img);
+            if (!card || card.dataset.cmhaCategory) return;
+            const text = card.textContent || img.getAttribute("alt") || "";
+            card.dataset.cmhaCategory = detectCategory(text);
+        });
+        return true;
+    }
+
+    function applyFilter(category) {
+        const cards = embed.querySelectorAll("[data-cmha-category]");
+        cards.forEach(card => {
+            card.style.display = (category === "all" || card.dataset.cmhaCategory === category) ? "" : "none";
+        });
+    }
+
+    let currentCategory = "all";
+    catTabs.forEach(tab => {
+        tab.addEventListener("click", () => {
+            catTabs.forEach(t => t.classList.remove("active"));
+            tab.classList.add("active");
+            currentCategory = tab.getAttribute("data-category");
+            applyFilter(currentCategory);
+        });
+    });
+
+    // Le widget charge ses produits de façon asynchrone : on observe le DOM
+    // et on retague à chaque changement (nouveaux produits, tri, etc.).
+    const observer = new MutationObserver(() => {
+        tagCards();
+        applyFilter(currentCategory);
+    });
+    observer.observe(embed, { childList: true, subtree: true });
+    tagCards();
+    applyFilter(currentCategory);
+})();
+</script>
 </body>
 </html>

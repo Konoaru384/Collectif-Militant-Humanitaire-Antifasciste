@@ -44,7 +44,10 @@ function productCard(item) {
         <div class="product-card-body">
             <h3>${item.title}</h3>
             <span class="product-price">${priceLabel(item)}</span>
-            <button class="btn-see-more" data-id="${item.id}">Voir plus</button>
+            <div class="product-card-actions">
+                <button class="btn-see-more" data-id="${item.id}">Voir plus</button>
+                <a href="${item.koFiUrl}" target="_blank" rel="noopener" class="btn-order-small">Commander</a>
+            </div>
         </div>
     </div>
   `;

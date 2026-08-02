@@ -570,9 +570,15 @@ nav a.active, nav a:hover {
     margin-bottom: 15px;
 }
 
-.btn-see-more {
+.product-card-actions {
     margin-top: auto;
-    padding: 10px 16px;
+    display: flex;
+    gap: 8px;
+}
+
+.btn-see-more {
+    flex: 1;
+    padding: 10px 12px;
     border: 1px solid #202124;
     background-color: #ffffff;
     color: #202124;
@@ -585,6 +591,25 @@ nav a.active, nav a:hover {
 .btn-see-more:hover {
     background-color: #202124;
     color: #ffffff;
+}
+
+.btn-order-small {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 12px;
+    background-color: #202124;
+    color: #ffffff;
+    border-radius: 8px;
+    font-weight: 500;
+    text-decoration: none;
+    text-align: center;
+    transition: background-color 0.2s;
+}
+
+.btn-order-small:hover {
+    background-color: #3c4043;
 }
 
 .donate-panel {
