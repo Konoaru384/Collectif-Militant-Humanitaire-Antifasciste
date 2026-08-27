@@ -123,49 +123,50 @@
 <script src="js/agenda.js"></script>
 <script src="js/site.js"></script>
 <script>
-    var map = L.map('map').setView([46.603, 1.888], 5);
+  var map = L.map('map').setView([46.603, 1.888], 5);
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 19,
-        attribution: '© OpenStreetMap'
-    }).addTo(map);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '© OpenStreetMap'
+}).addTo(map);
 
-    var customIcon = L.icon({
-        iconUrl: 'assets/logocolomiers.png',
-        iconSize: [40, 40],
-        iconAnchor: [20, 20]
-    });
+var colomiersIcon = L.icon({
+    iconUrl: 'assets/logocolomiers.png',
+    iconSize: [40, 40],
+    iconAnchor: [20, 20]
+});
 
-    var colomiersMarker = L.marker([43.612, 1.332], {icon: customIcon}).addTo(map);
-    colomiersMarker.bindPopup('<b>Collectif CMHA - Colomiers</b><br><a href="#colomiers-details">Voir détails</a>');
+var legeuvinIcon = L.icon({
+    iconUrl: 'assets/logoleguevin.png',
+    iconSize: [40, 40],
+    iconAnchor: [20, 20]
+});
 
-    var legeuvinIcon = L.icon({
-        iconUrl: 'assets/logolegeuvin.png',
-        iconSize: [40, 40],
-        iconAnchor: [20, 20]
-    });
+var fiIcon = L.icon({
+    iconUrl: 'assets/FILeguevin.png',
+    iconSize: [40, 40],
+    iconAnchor: [20, 20]
+});
 
-    var legeuvinMarker = L.marker([43.614, 1.235], {icon: legeuvinIcon}).addTo(map);
-    legeuvinMarker.bindPopup('<b>Collectif CMHA - Léguevin</b><br><a href="#legeuvin-details">Voir détails</a>');
+var rennesIcon = L.icon({
+    iconUrl: 'assets/logorennes.png',
+    iconSize: [40, 40],
+    iconAnchor: [20, 20]
+});
 
-    var rennesIcon = L.icon({
-        iconUrl: "assets/logorennes.png",
-        iconSize: [40, 40],
-        iconAnchor: [20, 20]
-    });
 
-        var legeuvinMarker = L.marker([43.5991301, 1.2347784], {icon: legeuvinIcon}).addTo(map);
-    legeuvinMarker.bindPopup('<b>Groupe de Léguevin-Brax-Pibrac des jeunes insoumis·es & lycéen·nes</b><br><a href="#FI-Details">Voir détails</a>');
+var colomiersMarker = L.marker([43.612, 1.332], {icon: colomiersIcon}).addTo(map);
+colomiersMarker.bindPopup('<b>Collectif CMHA - Colomiers</b><br><a href="#colomiers-details">Voir détails</a>');
 
-    var rennesIcon = L.icon({
-        iconUrl: "assets/FILeguevin.png",
-        iconSize: [40, 40],
-        iconAnchor: [20, 20]
-    });
+var legeuvinMarker = L.marker([43.614, 1.235], {icon: legeuvinIcon}).addTo(map);
+legeuvinMarker.bindPopup('<b>Collectif CMHA - Léguevin</b><br><a href="#legeuvin-details">Voir détails</a>');
 
-    
-    var rennesMarker = L.marker([48.1173, -1.6778], {icon: rennesIcon}).addTo(map);
-    rennesMarker.bindPopup('<b>Collectif CMHA - Rennes</b><br><a href="#rennes-details">Voir détails</a>');
+var fiMarker = L.marker([43.5991301, 1.2347784], {icon: fiIcon}).addTo(map);
+fiMarker.bindPopup('<b>Groupe FI Léguevin-Brax-Pibrac</b><br><a href="#FI-Details">Voir détails</a>');
+
+var rennesMarker = L.marker([48.1173, -1.6778], {icon: rennesIcon}).addTo(map);
+rennesMarker.bindPopup('<b>Collectif CMHA - Rennes</b><br><a href="#rennes-details">Voir détails</a>');
+
 
     var alliesLayer = L.layerGroup();
 
