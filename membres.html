@@ -194,7 +194,7 @@ rennesMarker.bindPopup('<b>Collectif CMHA - Rennes</b><br><a href="#rennes-detai
         if (!container) return;
         var groups = CMHA_ALLY_GROUPS || [];
         if (groups.length === 0) {
-            container.innerHTML = "<p style=\"text-align:center;color:#5f6368;\">Aucun groupe allié référencé pour le moment.</p>";
+            container.innerHTML = "<p style=\"text-align:center;color:#5f6368;\">.</p>";
             return;
         }
         container.innerHTML = groups.map(function (group) {
