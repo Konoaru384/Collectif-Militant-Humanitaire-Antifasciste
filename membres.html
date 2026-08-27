@@ -161,8 +161,19 @@ colomiersMarker.bindPopup('<b>Collectif CMHA - Colomiers</b><br><a href="#colomi
 var legeuvinMarker = L.marker([43.614, 1.235], {icon: legeuvinIcon}).addTo(map);
 legeuvinMarker.bindPopup('<b>Collectif CMHA - Léguevin</b><br><a href="#legeuvin-details">Voir détails</a>');
 
+function showAlliesLayer() {
+    if (!map.hasLayer(alliesLayer)) {
+        map.addLayer(alliesLayer);
+        if (allyToggleBtn) {
+            allyToggleBtn.classList.add("is-on");
+            allyToggleBtn.setAttribute("aria-pressed", "true");
+            allyToggleBtn.textContent = "Masquer";
+        }
+    }
+}
+
 var fiMarker = L.marker([43.5991301, 1.2347784], {icon: fiIcon}).addTo(map);
-fiMarker.bindPopup('<b>Groupe FI Léguevin-Brax-Pibrac</b><br><a href="#FI-Details">Voir détails</a>');
+fiMarker.bindPopup('<b>Groupe FI Léguevin-Brax-Pibrac</b><br><a href="#FI-Details" onclick="showAlliesLayer()">Voir détails</a>');
 
 var rennesMarker = L.marker([48.1173, -1.6778], {icon: rennesIcon}).addTo(map);
 rennesMarker.bindPopup('<b>Collectif CMHA - Rennes</b><br><a href="#rennes-details">Voir détails</a>');
