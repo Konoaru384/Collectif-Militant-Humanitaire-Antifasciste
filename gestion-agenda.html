@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CMHA - Gestion de l'agenda (usage interne)</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header id="site-header"></header>
+
+<div class="container" style="display: block;">
+    <h1 style="text-align: center;">Gestion de l'agenda</h1>
+    <p style="max-width: 800px; margin: 0 auto 30px auto; text-align: center; color: #5f6368;">
+        Cette page sert à préparer la liste des actions affichées sur la page Agenda et sur la carte des collectifs. Elle fonctionne entièrement dans votre navigateur, sans aucune clé ni API Google.
+    </p>
+
+    <div class="editor-page">
+        <div class="editor-field">
+            <label>Importer une liste existante (data/events.js)</label>
+            <input type="file" id="import-file" accept=".js,.json,text/javascript,application/json">
+            <div class="editor-hint">Optionnel : reprenez le fichier data/events.js déjà utilisé sur le site pour continuer à le compléter.</div>
+        </div>
+
+        <h3>Ajouter une action</h3>
+
+        <div class="editor-field">
+            <label>Titre de l'action</label>
+            <input type="text" id="ev-title" placeholder="Ex : Distribution de tracts à Toulouse" oninput="updateTypePreview()">
+            <div class="editor-hint" id="type-preview"></div>
+        </div>
+
+        <div class="editor-field-row">
+            <div class="editor-field">
+                <label>Date</label>
+                <input type="date" id="ev-date">
+            </div>
+            <div class="editor-field">
+                <label>Heure (optionnel)</label>
+                <input type="time" id="ev-time">
+            </div>
+        </div>
+
+        <div class="editor-field">
+            <label>Lieu</label>
+            <input type="text" id="ev-location" placeholder="Ex : Place du Capitole, Toulouse (ou laissez vide si en ligne)">
+            <div class="editor-actions" style="margin-top:10px;">
+                <button type="button" class="editor-btn-secondary" onclick="checkLocation()">Vérifier que ce lieu sera trouvé sur la carte</button>
+                <span class="editor-copied" id="location-status" style="display:none;"></span>
+            </div>
+            <div class="editor-hint"><label style="font-weight:400;"><input type="checkbox" id="ev-online"> Cette action se déroule en ligne (visioconférence)</label></div>
+        </div>
+
+        <div class="editor-field">
+            <label>Description</label>
+            <textarea id="ev-description" placeholder="Décrivez l'action. Un lien actionpopulaire.fr collé ici sera détecté automatiquement." oninput="detectApLink()"></textarea>
+        </div>
+
+        <div class="editor-field">
+            <label>Lien Action Populaire (détecté automatiquement si présent dans la description)</label>
+            <input type="url" id="ev-ap-link" placeholder="https://actionpopulaire.fr/...">
+        </div>
+
+        <div class="editor-field">
+            <label>Lien "Plus d'infos" (optionnel)</label>
+            <input type="url" id="ev-link" placeholder="https://...">
+        </div>
+
+        <div class="editor-actions">
+            <button type="button" class="editor-btn-primary" id="add-event-btn" onclick="addOrUpdateEvent()">Ajouter à la liste</button>
+            <button type="button" class="editor-btn-secondary" id="cancel-edit-btn" style="display:none;" onclick="cancelEdit()">Annuler la modification</button>
+        </div>
+
+        <div class="editor-hint" style="margin-bottom:30px;">
+            Pour que l'icône soit correcte, utilisez un de ces mots dans le titre : <strong>tract</strong> ou <strong>flyer</strong>, <strong>apéro</strong>, <strong>rencontre</strong> ou <strong>meeting</strong>, <strong>congrès</strong>.
+        </div>
+
+        <h3>Actions configurées</h3>
+        <div id="events-list"></div>
+        <p class="editor-hint" id="events-empty-hint">Aucune action ajoutée pour le moment.</p>
+
+        <h3>Fichier à installer sur le site</h3>
+        <p class="editor-hint">Téléchargez ce fichier puis remplacez data/events.js par celui-ci dans le dossier du site.</p>
+        <div class="editor-actions">
+            <button type="button" class="editor-btn-primary" onclick="downloadConfig()">Télécharger data/events.js</button>
+            <button type="button" class="editor-btn-secondary" onclick="copyConfig()">Copier le code</button>
+            <span class="editor-copied" id="config-copied" style="display:none;">Copié !</span>
+        </div>
+        <div class="editor-output" id="config-output"></div>
+    </div>
+</div>
+
+<script src="js/site.js"></script>
+<script src="js/agenda.js"></script>
+<script>
+var currentEvents = [];
+var editingIndex = -1;
+
+function slugifyEventTitle(text) {
+    return text
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-+|-+$/g, "");
+}
+
+function updateTypePreview() {
+    var title = document.getElementById("ev-title").value;
+    var type = EVENT_TYPES[detectEventType(title)];
+    document.getElementById("type-preview").textContent = title ? "Icône détectée : " + type.label : "";
+}
+
+function detectApLink() {
+    var description = document.getElementById("ev-description").value;
+    var link = findActionPopulaireLink(description);
+    if (link) document.getElementById("ev-ap-link").value = link;
+}
+
+function checkLocation() {
+    var location = document.getElementById("ev-location").value.trim();
+    var status = document.getElementById("location-status");
+    if (!location) {
+        alert("Entrez un lieu à vérifier.");
+        return;
+    }
+    status.style.display = "inline";
+    status.textContent = "Recherche en cours...";
+    geocodeLocation(location).then(function (coords) {
+        status.textContent = coords ? "Lieu trouvé, il apparaîtra correctement sur la carte." : "Lieu introuvable, essayez une formulation plus simple (ville seule par exemple).";
+        setTimeout(function () { status.style.display = "none"; }, 4000);
+    });
+}
+
+function renderEventsList() {
+    var list = document.getElementById("events-list");
+    var emptyHint = document.getElementById("events-empty-hint");
+    list.innerHTML = "";
+    if (currentEvents.length === 0) {
+        emptyHint.style.display = "block";
+    } else {
+        emptyHint.style.display = "none";
+    }
+    currentEvents.forEach(function (event, index) {
+        var row = document.createElement("div");
+        row.className = "editor-group-row";
+        row.innerHTML =
+            '<div class="editor-group-row-text"><strong>' + event.title + '</strong><span>' +
+            formatEventDate(event) + (event.location ? " - " + event.location : "") +
+            '</span></div>' +
+            '<button type="button" class="editor-btn-secondary" onclick="editEvent(' + index + ')">Modifier</button>' +
+            '<button type="button" class="editor-btn-remove" onclick="removeEvent(' + index + ')">Retirer</button>';
+        list.appendChild(row);
+    });
+    renderConfigOutput();
+}
+
+function clearForm() {
+    document.getElementById("ev-title").value = "";
+    document.getElementById("ev-date").value = "";
+    document.getElementById("ev-time").value = "";
+    document.getElementById("ev-location").value = "";
+    document.getElementById("ev-online").checked = false;
+    document.getElementById("ev-description").value = "";
+    document.getElementById("ev-ap-link").value = "";
+    document.getElementById("ev-link").value = "";
+    document.getElementById("type-preview").textContent = "";
+}
+
+function addOrUpdateEvent() {
+    var title = document.getElementById("ev-title").value.trim();
+    var date = document.getElementById("ev-date").value;
+    var time = document.getElementById("ev-time").value;
+    var location = document.getElementById("ev-location").value.trim();
+    var online = document.getElementById("ev-online").checked;
+    var description = document.getElementById("ev-description").value.trim();
+    var actionPopulaireLink = document.getElementById("ev-ap-link").value.trim();
+    var link = document.getElementById("ev-link").value.trim();
+
+    if (!title || !date) {
+        alert("Merci de renseigner au moins un titre et une date.");
+        return;
+    }
+
+    var event = {
+        id: slugifyEventTitle(title) + "-" + date,
+        title: title,
+        date: date,
+        time: time,
+        location: location,
+        online: online,
+        description: description,
+        actionPopulaireLink: actionPopulaireLink,
+        link: link
+    };
+
+    if (editingIndex === -1) {
+        currentEvents.push(event);
+    } else {
+        currentEvents[editingIndex] = event;
+        editingIndex = -1;
+        document.getElementById("add-event-btn").textContent = "Ajouter à la liste";
+        document.getElementById("cancel-edit-btn").style.display = "none";
+    }
+
+    clearForm();
+    renderEventsList();
+}
+
+function editEvent(index) {
+    var event = currentEvents[index];
+    document.getElementById("ev-title").value = event.title;
+    document.getElementById("ev-date").value = event.date;
+    document.getElementById("ev-time").value = event.time || "";
+    document.getElementById("ev-location").value = event.location || "";
+    document.getElementById("ev-online").checked = !!event.online;
+    document.getElementById("ev-description").value = event.description || "";
+    document.getElementById("ev-ap-link").value = event.actionPopulaireLink || "";
+    document.getElementById("ev-link").value = event.link || "";
+    updateTypePreview();
+    editingIndex = index;
+    document.getElementById("add-event-btn").textContent = "Enregistrer les modifications";
+    document.getElementById("cancel-edit-btn").style.display = "inline-block";
+}
+
+function cancelEdit() {
+    editingIndex = -1;
+    clearForm();
+    document.getElementById("add-event-btn").textContent = "Ajouter à la liste";
+    document.getElementById("cancel-edit-btn").style.display = "none";
+}
+
+function removeEvent(index) {
+    currentEvents.splice(index, 1);
+    renderEventsList();
+}
+
+function escapeEventString(text) {
+    return String(text).replace(/\\/g, "\\\\").replace(/"/g, '\\"');
+}
+
+function generateConfigText() {
+    var lines = currentEvents.map(function (event) {
+        return "    {\n" +
+            '        id: "' + escapeEventString(event.id) + '",\n' +
+            '        title: "' + escapeEventString(event.title) + '",\n' +
+            '        date: "' + escapeEventString(event.date) + '",\n' +
+            '        time: "' + escapeEventString(event.time || "") + '",\n' +
+            '        location: "' + escapeEventString(event.location || "") + '",\n' +
+            "        online: " + (event.online ? "true" : "false") + ",\n" +
+            '        description: "' + escapeEventString(event.description || "") + '",\n' +
+            '        actionPopulaireLink: "' + escapeEventString(event.actionPopulaireLink || "") + '",\n' +
+            '        link: "' + escapeEventString(event.link || "") + '"\n' +
+            "    }";
+    });
+    return "var CMHA_EVENTS = [\n" + lines.join(",\n") + "\n];\n";
+}
+
+function renderConfigOutput() {
+    document.getElementById("config-output").textContent = generateConfigText();
+}
+
+function downloadConfig() {
+    var blob = new Blob([generateConfigText()], { type: "text/javascript" });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement("a");
+    a.href = url;
+    a.download = "events.js";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+}
+
+function copyConfig() {
+    navigator.clipboard.writeText(generateConfigText()).then(function () {
+        var el = document.getElementById("config-copied");
+        el.style.display = "inline";
+        setTimeout(function () { el.style.display = "none"; }, 2000);
+    });
+}
+
+function handleImportFile(event) {
+    var file = event.target.files[0];
+    if (!file) return;
+    var reader = new FileReader();
+    reader.onload = function () {
+        try {
+            var text = reader.result;
+            var parsed = new Function(text + "\nreturn (typeof CMHA_EVENTS !== \"undefined\") ? CMHA_EVENTS : [];")();
+            currentEvents = (parsed || []).map(function (ev) {
+                return {
+                    id: ev.id || (slugifyEventTitle(ev.title || "") + "-" + (ev.date || "")),
+                    title: ev.title || "",
+                    date: ev.date || "",
+                    time: ev.time || "",
+                    location: ev.location || "",
+                    online: !!ev.online,
+                    description: ev.description || "",
+                    actionPopulaireLink: ev.actionPopulaireLink || "",
+                    link: ev.link || ""
+                };
+            });
+            renderEventsList();
+        } catch (error) {
+            alert("Ce fichier n'a pas pu être lu, vérifiez qu'il s'agit bien d'un fichier events.js valide.");
+        }
+    };
+    reader.readAsText(file);
+}
+
+document.getElementById("import-file").addEventListener("change", handleImportFile);
+renderEventsList();
+</script>
+</body>
+</html>

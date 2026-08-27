@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CMHA - Gestion des groupes alliés (usage interne)</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+</head>
+<body>
+
+<header id="site-header"></header>
+
+<div class="container" style="display: block;">
+    <h1 style="text-align: center;">Gestion des groupes alliés</h1>
+    <p style="max-width: 800px; margin: 0 auto 30px auto; text-align: center; color: #5f6368;">
+        Cette page sert à préparer la liste des groupes alliés affichés sur la carte de la page Membres & Collectifs. Elle fonctionne entièrement dans votre navigateur, avec la géolocalisation gratuite d'OpenStreetMap : aucun compte ni clé Google n'est utilisé.
+    </p>
+
+    <div class="editor-page">
+        <div class="editor-field">
+            <label>Importer une liste existante (data/allies-config.js)</label>
+            <input type="file" id="import-file" accept=".js,.json,text/javascript,application/json">
+            <div class="editor-hint">Optionnel : reprenez le fichier data/allies-config.js déjà utilisé sur le site pour continuer à le compléter.</div>
+        </div>
+
+        <h3>Ajouter un groupe allié</h3>
+
+        <div class="editor-field">
+            <label>Nom du groupe</label>
+            <input type="text" id="ally-name" placeholder="Ex : Nom du groupe allié">
+        </div>
+
+        <div class="editor-field-row">
+            <div class="editor-field">
+                <label>Ville</label>
+                <input type="text" id="ally-city" placeholder="Ex : Toulouse">
+            </div>
+            <div class="editor-field">
+                <label>Lien du groupe</label>
+                <input type="url" id="ally-link" placeholder="https://...">
+            </div>
+        </div>
+
+        <div class="editor-field">
+            <label>Adresse ou ville à géolocaliser</label>
+            <input type="text" id="ally-address" placeholder="Ex : Toulouse, France">
+            <div class="editor-actions" style="margin-top:10px;">
+                <button type="button" class="editor-btn-secondary" onclick="geocodeAddress()">Trouver les coordonnées (gratuit, OpenStreetMap)</button>
+                <span class="editor-copied" id="geocode-status" style="display:none;"></span>
+            </div>
+        </div>
+
+        <div class="editor-field-row">
+            <div class="editor-field">
+                <label>Latitude</label>
+                <input type="number" step="any" id="ally-lat" placeholder="Ex : 43.6045">
+            </div>
+            <div class="editor-field">
+                <label>Longitude</label>
+                <input type="number" step="any" id="ally-lng" placeholder="Ex : 1.4442">
+            </div>
+        </div>
+
+        <div class="editor-field">
+            <label>Description</label>
+            <textarea id="ally-description" placeholder="Décrivez le groupe et la nature de la collaboration avec le CMHA."></textarea>
+        </div>
+
+        <div class="editor-actions">
+            <button type="button" class="editor-btn-primary" id="add-group-btn" onclick="addOrUpdateGroup()">Ajouter à la liste</button>
+            <button type="button" class="editor-btn-secondary" id="cancel-edit-btn" style="display:none;" onclick="cancelEdit()">Annuler la modification</button>
+        </div>
+
+        <h3>Groupes configurés</h3>
+        <div id="groups-list"></div>
+        <p class="editor-hint" id="groups-empty-hint">Aucun groupe ajouté pour le moment.</p>
+
+        <div id="ally-preview-map"></div>
+
+        <h3>Fichier à installer sur le site</h3>
+        <p class="editor-hint">Téléchargez ce fichier puis remplacez data/allies-config.js par celui-ci dans le dossier du site.</p>
+        <div class="editor-actions">
+            <button type="button" class="editor-btn-primary" onclick="downloadConfig()">Télécharger data/allies-config.js</button>
+            <button type="button" class="editor-btn-secondary" onclick="copyConfig()">Copier le code</button>
+            <span class="editor-copied" id="config-copied" style="display:none;">Copié !</span>
+        </div>
+        <div class="editor-output" id="config-output"></div>
+    </div>
+</div>
+
+<script src="js/site.js"></script>
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script>
+var currentGroups = [];
+var editingIndex = -1;
+var previewMap = null;
+var previewMarkers = [];
+
+function slugifyAllyName(text) {
+    return text
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-+|-+$/g, "");
+}
+
+function initPreviewMap() {
+    previewMap = L.map("ally-preview-map").setView([46.603, 1.888], 5);
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        maxZoom: 19,
+        attribution: "© OpenStreetMap"
+    }).addTo(previewMap);
+}
+
+function createAllyPreviewIcon() {
+    return L.divIcon({
+        className: "ally-map-icon",
+        html: '<div class="ally-map-icon-inner">A</div>',
+        iconSize: [30, 30],
+        iconAnchor: [15, 15]
+    });
+}
+
+function renderPreviewMap() {
+    previewMarkers.forEach(function (marker) {
+        previewMap.removeLayer(marker);
+    });
+    previewMarkers = [];
+    currentGroups.forEach(function (group) {
+        if (typeof group.lat !== "number" || typeof group.lng !== "number") return;
+        var marker = L.marker([group.lat, group.lng], {icon: createAllyPreviewIcon()}).addTo(previewMap);
+        marker.bindPopup("<b>" + group.name + "</b>" + (group.city ? "<br>" + group.city : ""));
+        previewMarkers.push(marker);
+    });
+}
+
+function renderGroupsList() {
+    var list = document.getElementById("groups-list");
+    var emptyHint = document.getElementById("groups-empty-hint");
+    list.innerHTML = "";
+    if (currentGroups.length === 0) {
+        emptyHint.style.display = "block";
+    } else {
+        emptyHint.style.display = "none";
+    }
+    currentGroups.forEach(function (group, index) {
+        var row = document.createElement("div");
+        row.className = "editor-group-row";
+        row.innerHTML =
+            '<div class="editor-group-row-text"><strong>' + group.name + '</strong><span>' +
+            (group.city ? group.city + " - " : "") + group.lat + ", " + group.lng +
+            '</span></div>' +
+            '<button type="button" class="editor-btn-secondary" onclick="editGroup(' + index + ')">Modifier</button>' +
+            '<button type="button" class="editor-btn-remove" onclick="removeGroup(' + index + ')">Retirer</button>';
+        list.appendChild(row);
+    });
+    renderPreviewMap();
+    renderConfigOutput();
+}
+
+function clearForm() {
+    document.getElementById("ally-name").value = "";
+    document.getElementById("ally-city").value = "";
+    document.getElementById("ally-link").value = "";
+    document.getElementById("ally-address").value = "";
+    document.getElementById("ally-lat").value = "";
+    document.getElementById("ally-lng").value = "";
+    document.getElementById("ally-description").value = "";
+}
+
+function addOrUpdateGroup() {
+    var name = document.getElementById("ally-name").value.trim();
+    var city = document.getElementById("ally-city").value.trim();
+    var link = document.getElementById("ally-link").value.trim();
+    var description = document.getElementById("ally-description").value.trim();
+    var lat = parseFloat(document.getElementById("ally-lat").value);
+    var lng = parseFloat(document.getElementById("ally-lng").value);
+
+    if (!name || isNaN(lat) || isNaN(lng)) {
+        alert("Merci de renseigner au moins un nom et des coordonnées (latitude et longitude).");
+        return;
+    }
+
+    var group = {
+        id: slugifyAllyName(name),
+        name: name,
+        city: city,
+        lat: lat,
+        lng: lng,
+        description: description,
+        link: link
+    };
+
+    if (editingIndex === -1) {
+        currentGroups.push(group);
+    } else {
+        currentGroups[editingIndex] = group;
+        editingIndex = -1;
+        document.getElementById("add-group-btn").textContent = "Ajouter à la liste";
+        document.getElementById("cancel-edit-btn").style.display = "none";
+    }
+
+    clearForm();
+    renderGroupsList();
+}
+
+function editGroup(index) {
+    var group = currentGroups[index];
+    document.getElementById("ally-name").value = group.name;
+    document.getElementById("ally-city").value = group.city || "";
+    document.getElementById("ally-link").value = group.link || "";
+    document.getElementById("ally-lat").value = group.lat;
+    document.getElementById("ally-lng").value = group.lng;
+    document.getElementById("ally-description").value = group.description || "";
+    editingIndex = index;
+    document.getElementById("add-group-btn").textContent = "Enregistrer les modifications";
+    document.getElementById("cancel-edit-btn").style.display = "inline-block";
+}
+
+function cancelEdit() {
+    editingIndex = -1;
+    clearForm();
+    document.getElementById("add-group-btn").textContent = "Ajouter à la liste";
+    document.getElementById("cancel-edit-btn").style.display = "none";
+}
+
+function removeGroup(index) {
+    currentGroups.splice(index, 1);
+    renderGroupsList();
+}
+
+function geocodeAddress() {
+    var address = document.getElementById("ally-address").value.trim();
+    var status = document.getElementById("geocode-status");
+    if (!address) {
+        alert("Entrez une adresse ou une ville à géolocaliser.");
+        return;
+    }
+    status.style.display = "inline";
+    status.textContent = "Recherche en cours...";
+    var url = "https://nominatim.openstreetmap.org/search?format=json&limit=1&q=" + encodeURIComponent(address);
+    fetch(url)
+        .then(function (response) {
+            if (!response.ok) throw new Error("geocode-failed");
+            return response.json();
+        })
+        .then(function (data) {
+            if (!data || !data[0]) {
+                status.textContent = "Adresse introuvable, essayez une formulation plus simple.";
+                return;
+            }
+            document.getElementById("ally-lat").value = parseFloat(data[0].lat);
+            document.getElementById("ally-lng").value = parseFloat(data[0].lon);
+            status.textContent = "Coordonnées trouvées.";
+            setTimeout(function () { status.style.display = "none"; }, 3000);
+        })
+        .catch(function () {
+            status.textContent = "Erreur de géolocalisation, réessayez.";
+        });
+}
+
+function escapeAllyString(text) {
+    return String(text).replace(/\\/g, "\\\\").replace(/"/g, '\\"');
+}
+
+function generateConfigText() {
+    var lines = currentGroups.map(function (group) {
+        return "    {\n" +
+            '        id: "' + escapeAllyString(group.id) + '",\n' +
+            '        name: "' + escapeAllyString(group.name) + '",\n' +
+            '        city: "' + escapeAllyString(group.city || "") + '",\n' +
+            "        lat: " + group.lat + ",\n" +
+            "        lng: " + group.lng + ",\n" +
+            '        description: "' + escapeAllyString(group.description || "") + '",\n' +
+            '        link: "' + escapeAllyString(group.link || "") + '"\n' +
+            "    }";
+    });
+    return "var CMHA_ALLY_GROUPS = [\n" + lines.join(",\n") + "\n];\n";
+}
+
+function renderConfigOutput() {
+    document.getElementById("config-output").textContent = generateConfigText();
+}
+
+function downloadConfig() {
+    var blob = new Blob([generateConfigText()], { type: "text/javascript" });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement("a");
+    a.href = url;
+    a.download = "allies-config.js";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+}
+
+function copyConfig() {
+    navigator.clipboard.writeText(generateConfigText()).then(function () {
+        var el = document.getElementById("config-copied");
+        el.style.display = "inline";
+        setTimeout(function () { el.style.display = "none"; }, 2000);
+    });
+}
+
+function handleImportFile(event) {
+    var file = event.target.files[0];
+    if (!file) return;
+    var reader = new FileReader();
+    reader.onload = function () {
+        try {
+            var text = reader.result;
+            var parsed = new Function(text + "\nreturn (typeof CMHA_ALLY_GROUPS !== \"undefined\") ? CMHA_ALLY_GROUPS : [];")();
+            currentGroups = (parsed || []).map(function (group) {
+                return {
+                    id: group.id || slugifyAllyName(group.name || ""),
+                    name: group.name || "",
+                    city: group.city || "",
+                    lat: parseFloat(group.lat),
+                    lng: parseFloat(group.lng),
+                    description: group.description || "",
+                    link: group.link || ""
+                };
+            });
+            renderGroupsList();
+        } catch (error) {
+            alert("Ce fichier n'a pas pu être lu, vérifiez qu'il s'agit bien d'un fichier allies-config.js valide.");
+        }
+    };
+    reader.readAsText(file);
+}
+
+document.getElementById("import-file").addEventListener("change", handleImportFile);
+initPreviewMap();
+renderGroupsList();
+</script>
+</body>
+</html>

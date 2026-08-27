@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://collectif-militant-humanitaire-antifa.netlify.app/sitemap.xml

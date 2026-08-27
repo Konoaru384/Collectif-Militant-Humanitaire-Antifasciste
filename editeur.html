@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CMHA - Éditeur (usage interne)</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header id="site-header"></header>
+
+<div class="container" style="display: block;">
+    <h1 style="text-align: center;">Éditeur de contenu</h1>
+    <p style="max-width: 800px; margin: 0 auto 30px auto; text-align: center; color: #5f6368;">
+        Cette page est réservée à l'équipe du collectif pour créer facilement de nouveaux articles ou événements. Elle ne fait pas partie de la navigation publique du site.
+    </p>
+
+    <div class="editor-page">
+        <div class="editor-tabs">
+            <button class="editor-tab active" id="tab-article" onclick="switchTab('article')">Nouvel article</button>
+            <button class="editor-tab" id="tab-event" onclick="switchTab('event')">Ajouter un événement</button>
+            <a class="editor-tab" style="text-decoration:none;display:inline-block;" href="gestion-groupes-allies.html">Groupes alliés</a>
+        </div>
+
+        <div class="editor-section active" id="section-article">
+            <div class="editor-field">
+                <label>Titre de l'article</label>
+                <input type="text" id="art-title" placeholder="Ex : Manifestation contre l'extrême droite à Toulouse">
+            </div>
+
+            <div class="editor-field">
+                <label>Auteur / signature</label>
+                <input type="text" id="art-author" value="Collectif Militant Humanitaire Antifasciste">
+            </div>
+
+            <div class="editor-field">
+                <label>Date de publication</label>
+                <input type="date" id="art-date">
+            </div>
+
+            <div class="editor-field">
+                <label>Image principale (bannière en haut de l'article)</label>
+                <input type="url" id="art-main-image" placeholder="https://... ou assets/monimage.png">
+                <div class="editor-hint">Laisser vide si l'article n'a pas de bannière.</div>
+            </div>
+
+            <div class="editor-field">
+                <label>Texte de l'article</label>
+                <textarea id="art-body" placeholder="Écrivez votre article ici. Laissez une ligne vide entre deux paragraphes."></textarea>
+                <div class="editor-hint">
+                    <label style="font-weight:400;"><input type="checkbox" id="art-raw-html"> Mon texte contient déjà du code HTML (balises), ne pas le transformer automatiquement.</label>
+                </div>
+            </div>
+
+            <div class="editor-field">
+                <label>Images à insérer dans l'article</label>
+                <div id="art-images-list"></div>
+                <button class="editor-btn-secondary" onclick="addImageRow()">Ajouter une image</button>
+            </div>
+
+            <div class="editor-actions">
+                <button class="editor-btn-primary" onclick="generateArticle()">Générer l'article</button>
+            </div>
+
+            <div id="article-result" style="display:none;">
+                <h3>1. Fichier HTML à glisser dans le dossier du site</h3>
+                <p class="editor-hint">Téléchargez ce fichier puis déposez-le directement dans le dossier du site, à côté des autres pages (index.html, style.css, etc).</p>
+                <button class="editor-btn-secondary" onclick="downloadArticleFile()">Télécharger le fichier .html</button>
+
+                <h3 style="margin-top:30px;">2. Code à coller en haut du tableau ARTICLES dans data/articles.js</h3>
+                <div class="editor-actions" style="margin-top:0;">
+                    <button class="editor-btn-secondary" onclick="copyText('article-snippet', 'article-copied')">Copier le code</button>
+                    <span class="editor-copied" id="article-copied" style="display:none;">Copié !</span>
+                </div>
+                <div class="editor-output" id="article-snippet"></div>
+
+                <h3 style="margin-top:30px;">Aperçu</h3>
+                <div id="article-preview"></div>
+            </div>
+        </div>
+
+        <div class="editor-section" id="section-event">
+            <p>Les actions de l'agenda se gèrent maintenant directement sur le site, sans passer par Google Agenda ni aucune clé API : vous les ajoutez, modifiez ou retirez depuis une page dédiée, puis vous téléchargez le fichier à installer.</p>
+
+            <a class="editor-btn-primary" style="display:inline-block;text-decoration:none;" href="gestion-agenda.html">Ouvrir la gestion de l'agenda</a>
+
+            <h3 style="margin-top:30px;">Pour que l'icône et l'affichage soient corrects</h3>
+            <p>Dans le titre de l'action, utilisez un des mots suivants :</p>
+            <ul>
+                <li><strong>tracts</strong> ou <strong>flyers</strong> : une distribution de tracts</li>
+                <li><strong>apéro</strong> : un apéro militant</li>
+                <li><strong>rencontre</strong> ou <strong>meeting</strong> : une rencontre / réunion</li>
+                <li><strong>congrès</strong> : un congrès, automatiquement indiqué comme se déroulant en ligne</li>
+            </ul>
+            <p>Dans le champ "Lieu", indiquez la ville ou l'adresse pour qu'elle apparaisse correctement sur la carte du site (ou cochez "en ligne" pour une visioconférence).</p>
+            <p>Si l'action est liée à une mobilisation sur Action Populaire, collez simplement le lien de la page Action Populaire dans le champ "Description" : il sera automatiquement détecté et affiché comme lien de participation.</p>
+        </div>
+    </div>
+</div>
+
+<script src="data/articles.js"></script>
+<script src="js/site.js"></script>
+<script>
+var imageRowCount = 0;
+
+function switchTab(name) {
+    document.getElementById("tab-article").classList.toggle("active", name === "article");
+    document.getElementById("tab-event").classList.toggle("active", name === "event");
+    document.getElementById("section-article").classList.toggle("active", name === "article");
+    document.getElementById("section-event").classList.toggle("active", name === "event");
+}
+
+function addImageRow() {
+    imageRowCount = imageRowCount + 1;
+    var list = document.getElementById("art-images-list");
+    var row = document.createElement("div");
+    row.className = "editor-image-row";
+    row.id = "img-row-" + imageRowCount;
+    row.innerHTML =
+        '<input type="url" placeholder="https://... url de l\'image" class="art-image-url">' +
+        '<input type="text" placeholder="Description de l\'image" class="art-image-alt" style="flex:0 0 220px;">' +
+        '<button type="button" class="editor-btn-remove" onclick="removeImageRow(' + imageRowCount + ')">Retirer</button>';
+    list.appendChild(row);
+}
+
+function removeImageRow(id) {
+    var row = document.getElementById("img-row-" + id);
+    if (row) row.remove();
+}
+
+function slugify(text) {
+    return text
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-+|-+$/g, "");
+}
+
+function frenchDateDisplay(dateStr) {
+    var months = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"];
+    var parts = dateStr.split("-");
+    var year = parseInt(parts[0], 10);
+    var month = parseInt(parts[1], 10) - 1;
+    var day = parseInt(parts[2], 10);
+    return day + " " + months[month] + " " + year;
+}
+
+function escapeForTemplateLiteral(text) {
+    return text.replace(/`/g, "\\`").replace(/\$\{/g, "\\${");
+}
+
+function buildArticleBody() {
+    var raw = document.getElementById("art-body").value.trim();
+    var isRaw = document.getElementById("art-raw-html").checked;
+    var textHtml;
+    if (isRaw) {
+        textHtml = raw;
+    } else {
+        var paragraphs = raw.split(/\n\s*\n/);
+        textHtml = paragraphs.map(function (p) {
+            return "<p>" + p.trim().replace(/\n/g, "<br>") + "</p>";
+        }).join("\n\n      ");
+    }
+
+    var imageBlocks = Array.from(document.querySelectorAll(".art-image-url")).map(function (input, index) {
+        var url = input.value.trim();
+        if (!url) return "";
+        var altInputs = document.querySelectorAll(".art-image-alt");
+        var alt = altInputs[index] ? altInputs[index].value.trim() : "";
+        return '<img class="inline-photo" src="' + url + '" alt="' + alt + '">';
+    }).filter(function (b) { return b !== ""; }).join("\n      ");
+
+    return textHtml + (imageBlocks ? "\n\n      " + imageBlocks : "");
+}
+
+var lastArticle = null;
+
+function generateArticle() {
+    var title = document.getElementById("art-title").value.trim();
+    var author = document.getElementById("art-author").value.trim();
+    var date = document.getElementById("art-date").value;
+    var mainImage = document.getElementById("art-main-image").value.trim();
+
+    if (!title || !date) {
+        alert("Merci de renseigner au moins un titre et une date.");
+        return;
+    }
+
+    var slug = slugify(title);
+    var page = slug + ".html";
+    var dateDisplay = frenchDateDisplay(date);
+    var body = buildArticleBody();
+
+    lastArticle = {
+        id: slug,
+        page: page,
+        date: date,
+        dateDisplay: dateDisplay,
+        author: author,
+        title: title,
+        image: mainImage || null,
+        body: body
+    };
+
+    var snippet =
+        "  {\n" +
+        '    id: "' + slug + '",\n' +
+        '    page: "' + page + '",\n' +
+        '    date: "' + date + '",\n' +
+        '    dateDisplay: "' + dateDisplay + '",\n' +
+        '    author: "' + author.replace(/"/g, '\\"') + '",\n' +
+        '    title: "' + title.replace(/"/g, '\\"') + '",\n' +
+        '    image: ' + (mainImage ? '"' + mainImage + '"' : "null") + ",\n" +
+        "    body: `\n      " + escapeForTemplateLiteral(body) + "\n    `\n" +
+        "  },";
+
+    document.getElementById("article-snippet").textContent = snippet;
+
+    document.getElementById("article-preview").innerHTML =
+        '<article class="post">' +
+        (mainImage ? '<img src="' + mainImage + '" alt="' + title + '" class="article-banner">' : "") +
+        '<div class="post-content">' +
+        '<span class="post-meta">' + dateDisplay + " - par : " + author + '</span>' +
+        "<h2>" + title + "</h2>" +
+        body +
+        "</div></article>";
+
+    document.getElementById("article-result").style.display = "block";
+}
+
+function downloadArticleFile() {
+    if (!lastArticle) {
+        alert("Générez d'abord l'article.");
+        return;
+    }
+    var html =
+        "<!DOCTYPE html>\n" +
+        '<html lang="fr">\n' +
+        "<head>\n" +
+        '    <meta charset="UTF-8">\n' +
+        "    <title>CMHA - " + lastArticle.title + "</title>\n" +
+        '    <link rel="stylesheet" href="style.css">\n' +
+        "</head>\n" +
+        "<body>\n\n" +
+        '<header id="site-header"></header>\n\n' +
+        '<div class="container">\n' +
+        '    <main class="main-content" id="article-container" data-article-id="' + lastArticle.id + '"></main>\n' +
+        '    <aside class="sidebar" id="site-sidebar"></aside>\n' +
+        "</div>\n\n" +
+        '<script src="data/articles.js"></' + "script>\n" +
+        '<script src="js/site.js"></' + "script>\n" +
+        "</body>\n" +
+        "</html>\n";
+
+    var blob = new Blob([html], { type: "text/html" });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement("a");
+    a.href = url;
+    a.download = lastArticle.page;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+}
+
+function copyText(sourceId, feedbackId) {
+    var text = document.getElementById(sourceId).textContent;
+    navigator.clipboard.writeText(text).then(function () {
+        var el = document.getElementById(feedbackId);
+        el.style.display = "inline";
+        setTimeout(function () { el.style.display = "none"; }, 2000);
+    });
+}
+
+addImageRow();
+</script>
+</body>
+</html>
