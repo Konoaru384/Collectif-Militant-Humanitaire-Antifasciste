@@ -91,9 +91,9 @@
     </div>
 
     <h2 style="text-align:center;">Groupes alliés / En collaboration</h2>
-        <div class="collectif-details" id="rennes-details">
+        <div class="collectif-details" id="FI-Details">
         <div class="collectif-info">
-            <img src="assets/FILeguevin.webp" alt="Logo Rennes" class="collectif-logo">
+            <img src="assets/FILeguevin.png" alt="Logo LBP" class="collectif-logo">
 
             <div class="collectif-details-text">
                 <h2 style="margin-top:0;">Léguevin-Brax-Pibrac</h2>
@@ -154,6 +154,16 @@
         iconAnchor: [20, 20]
     });
 
+        var legeuvinMarker = L.marker([43.5991301, 1.2347784], {icon: legeuvinIcon}).addTo(map);
+    legeuvinMarker.bindPopup('<b>Groupe de Léguevin-Brax-Pibrac des jeunes insoumis·es & lycéen·nes</b><br><a href="#FI-Details">Voir détails</a>');
+
+    var rennesIcon = L.icon({
+        iconUrl: "assets/FILeguevin.png",
+        iconSize: [40, 40],
+        iconAnchor: [20, 20]
+    });
+
+    
     var rennesMarker = L.marker([48.1173, -1.6778], {icon: rennesIcon}).addTo(map);
     rennesMarker.bindPopup('<b>Collectif CMHA - Rennes</b><br><a href="#rennes-details">Voir détails</a>');
 
