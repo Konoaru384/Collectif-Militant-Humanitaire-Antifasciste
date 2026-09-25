@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CMHA - Membres & Collectifs</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css">
 </head>
 <body>
 
@@ -19,6 +19,7 @@
             <span class="map-controls-label">Groupes alliés / En collaboration</span>
             <button type="button" id="ally-toggle-btn" class="map-toggle-btn" aria-pressed="false">Afficher</button>
         </div>
+
         <div class="map-controls-group">
             <span class="map-controls-label">Prochaines actions</span>
             <button type="button" id="events-toggle-btn" class="map-toggle-btn" aria-pressed="false">Afficher</button>
@@ -32,14 +33,15 @@
     <div class="collectif-details" id="colomiers-details">
         <div class="collectif-info">
             <img src="assets/logocolomiers.png" alt="Logo Colomiers" class="collectif-logo">
-            
+
             <div class="collectif-details-text">
                 <h2 style="margin-top:0;">Colomiers</h2>
                 <h3 style="color:#5f6368;">Collectif Militant Humanitaire Antifasciste - Colomiers</h3>
 
                 <p><strong>Description :</strong> Centre du CMHA, opérant à Colomiers.</p>
 
-                <p><strong>Réseaux et infos :</strong>
+                <p>
+                    <strong>Réseaux et infos :</strong>
                     <a href="https://www.youtube.com/@CMHA31">YouTube,</a>
                     <a href="https://www.instagram.com/p/DW4HcVOD4FD/">Instagram,</a>
                     <a href="https://www.tiktok.com/@cmhantifacsiste/video/7626422856934624534">TikTok,</a>
@@ -61,7 +63,8 @@
 
                 <p><strong>Description :</strong> Collectif CMHA actif à Léguevin et dans les communes voisines.</p>
 
-                <p><strong>Réseaux et infos :</strong>
+                <p>
+                    <strong>Réseaux et infos :</strong>
                     <a href="https://www.youtube.com/@CMHA31">YouTube,</a>
                     <a href="https://www.instagram.com/p/DW4HcVOD4FD/">Instagram,</a>
                     <a href="https://www.tiktok.com/@cmhantifacsiste/video/7626422856934624534">TikTok,</a>
@@ -73,7 +76,7 @@
         </div>
     </div>
 
-        <div class="collectif-details" id="rennes-details">
+    <div class="collectif-details" id="rennes-details">
         <div class="collectif-info">
             <img src="assets/logorennes.png" alt="Logo Rennes" class="collectif-logo">
 
@@ -83,13 +86,15 @@
 
                 <p><strong>Description :</strong> Collectif CMHA actif à Rennes.</p>
 
-                <p><strong>Réseaux et infos :</strong>
+                <p>
+                    <strong>Réseaux et infos :</strong>
                     <a href="https://www.instagram.com/cmha.35/">Instagram</a>
                 </p>
             </div>
         </div>
+    </div>
 
-<div class="collectif-details" id="Carhaix-details">
+    <div class="collectif-details" id="Carhaix-details">
         <div class="collectif-info">
             <img src="car.png" alt="Logo Carhaix-Plouguer" class="collectif-logo">
 
@@ -97,18 +102,21 @@
                 <h2 style="margin-top:0;">Carhaix-Plouguer</h2>
                 <h3 style="color:#5f6368;">Collectif Militant Humanitaire Antifasciste - Carhaix-Plouguer</h3>
 
-                <p><strong>Description :</strong> Collectif CMHA actif à Carhaix-Plouguer</p>
+                <p><strong>Description :</strong> Collectif CMHA actif à Carhaix-Plouguer.</p>
 
-                <p><strong>Réseaux et infos :</strong>
-                (bientôt)
+                <p>
+                    <strong>Réseaux et infos :</strong>
+                    (bientôt)
                 </p>
             </div>
         </div>
     </div>
 
     <h2 style="text-align:center;">Groupes alliés / En collaboration</h2>
-        <div id="allies-details-list"></div>
-        <div class="collectif-details" id="FI-Details">
+
+    <div id="allies-details-list"></div>
+
+    <div class="collectif-details" id="FI-Details">
         <div class="collectif-info">
             <img src="assets/FILeguevin.png" alt="Logo LBP" class="collectif-logo">
 
@@ -118,7 +126,8 @@
 
                 <p><strong>Description :</strong> Groupe LFI qui milite sur le secteur de Brax Leguevin et Pibrac.</p>
 
-                <p><strong>Réseaux et infos :</strong>
+                <p>
+                    <strong>Réseaux et infos :</strong>
                     <a href="https://actionpopulaire.fr/groupes/8ce8dce2-99fe-4bd0-9e90-8253bcbed1d5/">Action Populaire</a>
                 </p>
             </div>
@@ -139,8 +148,9 @@
 <script src="data/allies-config.js"></script>
 <script src="js/agenda.js"></script>
 <script src="js/site.js"></script>
+
 <script>
-  var map = L.map('map').setView([46.603, 1.888], 5);
+var map = L.map('map').setView([46.603, 1.888], 5);
 
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19,
@@ -172,228 +182,341 @@ var rennesIcon = L.icon({
 });
 
 var carIcon = L.icon({
-    iconUrl: 'Car.png',
+    iconUrl: 'car.png',
     iconSize: [40, 40],
     iconAnchor: [20, 20]
 });
-    
-var colomiersMarker = L.marker([43.612, 1.332], {icon: colomiersIcon}).addTo(map);
-colomiersMarker.bindPopup('<b>Collectif CMHA - Colomiers</b><br><a href="#colomiers-details">Voir détails</a>');
 
-var legeuvinMarker = L.marker([43.614, 1.235], {icon: legeuvinIcon}).addTo(map);
-legeuvinMarker.bindPopup('<b>Collectif CMHA - Léguevin</b><br><a href="#legeuvin-details">Voir détails</a>');
+var colomiersMarker = L.marker([43.612, 1.332], {
+    icon: colomiersIcon
+}).addTo(map);
 
-var fiMarker = L.marker([43.5991301, 1.2347784], {icon: fiIcon});
-fiMarker.bindPopup('<b>Groupe FI Léguevin-Brax-Pibrac</b><br><a href="#FI-Details" onclick="showAlliesLayer()">Voir détails</a>');
+colomiersMarker.bindPopup(
+    '<b>Collectif CMHA - Colomiers</b><br>' +
+    '<a href="#colomiers-details">Voir détails</a>'
+);
 
-var rennesMarker = L.marker([48.1173, -1.6778], {icon: rennesIcon}).addTo(map);
-rennesMarker.bindPopup('<b>Collectif CMHA - Rennes</b><br><a href="#rennes-details">Voir détails</a>');
+var legeuvinMarker = L.marker([43.614, 1.235], {
+    icon: legeuvinIcon
+}).addTo(map);
 
-var CarMarker = L.marker([48.278334, -3.567223], {icon: carIcon}).addTo(map);
-carMarker.bindPopup('<b>Collectif CMHA - Carhaix-Plouguer</b><br><a href="#rennes-details">Voir détails</a>');
+legeuvinMarker.bindPopup(
+    '<b>Collectif CMHA - Léguevin</b><br>' +
+    '<a href="#legeuvin-details">Voir détails</a>'
+);
 
+var fiMarker = L.marker([43.5991301, 1.2347784], {
+    icon: fiIcon
+});
 
-    var alliesLayer = L.layerGroup();
-    fiMarker.addTo(alliesLayer);
+fiMarker.bindPopup(
+    '<b>Groupe FI Léguevin-Brax-Pibrac</b><br>' +
+    '<a href="#FI-Details" onclick="showAlliesLayer()">Voir détails</a>'
+);
 
-    function createAllyIcon() {
-        return L.divIcon({
-            className: "ally-map-icon",
-            html: '<div class="ally-map-icon-inner">A</div>',
-            iconSize: [30, 30],
-            iconAnchor: [15, 15]
-        });
-    }
+var rennesMarker = L.marker([48.1173, -1.6778], {
+    icon: rennesIcon
+}).addTo(map);
 
-    (CMHA_ALLY_GROUPS || []).forEach(function (group) {
-        var allyMarker = L.marker([group.lat, group.lng], {icon: createAllyIcon()});
-        var linkHtml = group.link ? '<br><a href="' + group.link + '" target="_blank" rel="noopener">Plus d\'infos</a>' : "";
-        var cityHtml = group.city ? group.city + '<br>' : "";
-        allyMarker.bindPopup('<b>' + group.name + '</b><br>' + cityHtml + (group.description || "") + linkHtml);
-        allyMarker.addTo(alliesLayer);
+rennesMarker.bindPopup(
+    '<b>Collectif CMHA - Rennes</b><br>' +
+    '<a href="#rennes-details">Voir détails</a>'
+);
+
+var carMarker = L.marker([48.278334, -3.567223], {
+    icon: carIcon
+}).addTo(map);
+
+carMarker.bindPopup(
+    '<b>Collectif CMHA - Carhaix-Plouguer</b><br>' +
+    '<a href="#Carhaix-details">Voir détails</a>'
+);
+
+var alliesLayer = L.layerGroup();
+
+fiMarker.addTo(alliesLayer);
+
+function createAllyIcon() {
+    return L.divIcon({
+        className: "ally-map-icon",
+        html: '<div class="ally-map-icon-inner">A</div>',
+        iconSize: [30, 30],
+        iconAnchor: [15, 15]
     });
+}
 
-    function renderAlliesDetails() {
-        var container = document.getElementById("allies-details-list");
-        if (!container) return;
-        var groups = CMHA_ALLY_GROUPS || [];
-        if (groups.length === 0) {
-            container.innerHTML = "<p style=\"text-align:center;color:#5f6368;\">.</p>";
-            return;
+(CMHA_ALLY_GROUPS || []).forEach(function(group) {
+    var allyMarker = L.marker(
+        [group.lat, group.lng],
+        {
+            icon: createAllyIcon()
         }
-        container.innerHTML = groups.map(function (group) {
-            var initial = (group.name || "?").trim().charAt(0).toUpperCase();
-            var cityBlock = group.city ? '<h3 style="color:#5f6368;">' + group.city + '</h3>' : "";
-            var descriptionBlock = group.description
-                ? '<p><strong>Description :</strong> ' + group.description + '</p>'
-                : "";
-            var linkBlock = group.link
-                ? '<p><strong>Réseaux et infos :</strong> <a href="' + group.link + '" target="_blank" rel="noopener">Voir le groupe.</a></p>'
-                : "";
-            return '<div class="collectif-details">' +
-                '<div class="collectif-info">' +
-                '<div class="collectif-logo ally-logo-fallback">' + initial + '</div>' +
-                '<div class="collectif-details-text">' +
-                '<h2 style="margin-top:0;">' + group.name + '</h2>' +
-                cityBlock +
-                descriptionBlock +
-                linkBlock +
-                '</div>' +
-                '</div>' +
-                '</div>';
-        }).join("");
+    );
+
+    var linkHtml = group.link
+        ? '<br><a href="' + group.link + '" target="_blank" rel="noopener">Plus d\'infos</a>'
+        : "";
+
+    var cityHtml = group.city
+        ? group.city + '<br>'
+        : "";
+
+    allyMarker.bindPopup(
+        '<b>' + group.name + '</b><br>' +
+        cityHtml +
+        (group.description || "") +
+        linkHtml
+    );
+
+    allyMarker.addTo(alliesLayer);
+});
+
+function renderAlliesDetails() {
+    var container = document.getElementById("allies-details-list");
+
+    if (!container) {
+        return;
     }
 
-    renderAlliesDetails();
+    var groups = CMHA_ALLY_GROUPS || [];
 
-    var allyToggleBtn = document.getElementById("ally-toggle-btn");
-    if (allyToggleBtn) {
-        allyToggleBtn.addEventListener("click", function () {
-            if (map.hasLayer(alliesLayer)) {
-                map.removeLayer(alliesLayer);
-                allyToggleBtn.classList.remove("is-on");
-                allyToggleBtn.setAttribute("aria-pressed", "false");
-                allyToggleBtn.textContent = "Afficher";
-            } else {
-                map.addLayer(alliesLayer);
-                allyToggleBtn.classList.add("is-on");
-                allyToggleBtn.setAttribute("aria-pressed", "true");
-                allyToggleBtn.textContent = "Masquer";
-            }
+    if (groups.length === 0) {
+        container.innerHTML = "<p style=\"text-align:center;color:#5f6368;\">.</p>";
+        return;
+    }
+
+    container.innerHTML = groups.map(function(group) {
+        var initial = (group.name || "?").trim().charAt(0).toUpperCase();
+
+        var cityBlock = group.city
+            ? '<h3 style="color:#5f6368;">' + group.city + '</h3>'
+            : "";
+
+        var descriptionBlock = group.description
+            ? '<p><strong>Description :</strong> ' + group.description + '</p>'
+            : "";
+
+        var linkBlock = group.link
+            ? '<p><strong>Réseaux et infos :</strong> <a href="' + group.link + '" target="_blank" rel="noopener">Voir le groupe.</a></p>'
+            : "";
+
+        return '<div class="collectif-details">' +
+            '<div class="collectif-info">' +
+            '<div class="collectif-logo ally-logo-fallback">' + initial + '</div>' +
+            '<div class="collectif-details-text">' +
+            '<h2 style="margin-top:0;">' + group.name + '</h2>' +
+            cityBlock +
+            descriptionBlock +
+            linkBlock +
+            '</div>' +
+            '</div>' +
+            '</div>';
+    }).join("");
+}
+
+renderAlliesDetails();
+
+var allyToggleBtn = document.getElementById("ally-toggle-btn");
+
+if (allyToggleBtn) {
+    allyToggleBtn.addEventListener("click", function() {
+        if (map.hasLayer(alliesLayer)) {
+            map.removeLayer(alliesLayer);
+            allyToggleBtn.classList.remove("is-on");
+            allyToggleBtn.setAttribute("aria-pressed", "false");
+            allyToggleBtn.textContent = "Afficher";
+        } else {
+            map.addLayer(alliesLayer);
+            allyToggleBtn.classList.add("is-on");
+            allyToggleBtn.setAttribute("aria-pressed", "true");
+            allyToggleBtn.textContent = "Masquer";
+        }
+    });
+}
+
+var eventsLayer = L.layerGroup();
+var eventsVisible = false;
+var eventsBuilt = false;
+var eventsResolved = false;
+var currentActionsList = [];
+
+function renderActionsPanel() {
+    var panel = document.getElementById("online-events-panel");
+
+    if (!panel) {
+        return;
+    }
+
+    if (!eventsVisible) {
+        panel.innerHTML = "";
+        return;
+    }
+
+    if (currentActionsList.length === 0) {
+        panel.innerHTML = eventsResolved
+            ? ""
+            : "<p style=\"text-align:center;color:#5f6368;\">Chargement des actions...</p>";
+
+        return;
+    }
+
+    var sortedActions = currentActionsList
+        .slice()
+        .sort(function(a, b) {
+            return eventDateTime(a) - eventDateTime(b);
         });
-    }
 
-    var eventsLayer = L.layerGroup();
-    var eventsVisible = false;
-    var eventsBuilt = false;
-    var eventsResolved = false;
-    var currentActionsList = [];
-
-    function renderActionsPanel() {
-        var panel = document.getElementById("online-events-panel");
-        if (!panel) return;
-        if (!eventsVisible) {
-            panel.innerHTML = "";
-            return;
-        }
-        if (currentActionsList.length === 0) {
-            panel.innerHTML = eventsResolved
-                ? ""
-                : "<p style=\"text-align:center;color:#5f6368;\">Chargement des actions...</p>";
-            return;
-        }
-        var sortedActions = currentActionsList.slice().sort(function (a, b) { return eventDateTime(a) - eventDateTime(b); });
-        panel.innerHTML = "<h3>Prochaines actions</h3>" + sortedActions.map(function (ev) {
+    panel.innerHTML =
+        "<h3>Prochaines actions</h3>" +
+        sortedActions.map(function(ev) {
             var type = EVENT_TYPES[detectEventType(ev.title)];
-            var placeLabel = isEventOnline(ev) ? "en ligne" : (ev.location || "lieu à confirmer");
+
+            var placeLabel = isEventOnline(ev)
+                ? "en ligne"
+                : (ev.location || "lieu à confirmer");
+
             return '<a class="online-event-link" href="javascript:void(0)" onclick="openEventModal(\'' + ev.id + '\')">' +
                 '<span class="event-map-icon-inner" style="background-color:' + type.color + ';">' + type.icon + '</span>' +
                 '<span>' + ev.title + ' - ' + formatEventDate(ev) + ' (' + placeLabel + ')</span>' +
                 '</a>';
         }).join("");
+}
+
+function addToActionsList(ev) {
+    currentActionsList.push(ev);
+    renderActionsPanel();
+}
+
+function buildEventMarkers() {
+    if (eventsBuilt) {
+        return;
     }
 
-    function addToActionsList(ev) {
-        currentActionsList.push(ev);
-        renderActionsPanel();
-    }
+    eventsBuilt = true;
 
-    function buildEventMarkers() {
-        if (eventsBuilt) return;
-        eventsBuilt = true;
-        var upcoming = upcomingEvents();
-        var pending = [];
+    var upcoming = upcomingEvents();
+    var pending = [];
 
-        upcoming.forEach(function (ev) {
-            if (isEventOnline(ev) || !ev.location) {
+    upcoming.forEach(function(ev) {
+        if (isEventOnline(ev) || !ev.location) {
+            addToActionsList(ev);
+            return;
+        }
+
+        var task = geocodeLocation(ev.location).then(function(coords) {
+            if (!coords) {
                 addToActionsList(ev);
                 return;
             }
-            var task = geocodeLocation(ev.location).then(function (coords) {
-                if (!coords) {
-                    addToActionsList(ev);
-                    return;
-                }
-                var type = EVENT_TYPES[detectEventType(ev.title)];
-                var eventIcon = L.divIcon({
-                    className: "event-map-icon",
-                    html: '<div class="event-map-icon-inner" style="background-color:' + type.color + ';">' + type.icon + '</div>',
-                    iconSize: [34, 34],
-                    iconAnchor: [17, 17]
-                });
-                var eventMarker = L.marker([coords.lat, coords.lng], {icon: eventIcon});
-                eventMarker.bindPopup(
-                    '<b>' + ev.title + '</b><br>' +
-                    formatEventDate(ev) + '<br>' +
-                    ev.location + '<br>' +
-                    '<a href="javascript:void(0)" onclick="openEventModal(\'' + ev.id + '\')">Voir les détails</a>'
-                );
-                eventMarker.addTo(eventsLayer);
+
+            var type = EVENT_TYPES[detectEventType(ev.title)];
+
+            var eventIcon = L.divIcon({
+                className: "event-map-icon",
+                html: '<div class="event-map-icon-inner" style="background-color:' + type.color + ';">' + type.icon + '</div>',
+                iconSize: [34, 34],
+                iconAnchor: [17, 17]
             });
-            pending.push(task);
+
+            var eventMarker = L.marker(
+                [coords.lat, coords.lng],
+                {
+                    icon: eventIcon
+                }
+            );
+
+            eventMarker.bindPopup(
+                '<b>' + ev.title + '</b><br>' +
+                formatEventDate(ev) + '<br>' +
+                ev.location + '<br>' +
+                '<a href="javascript:void(0)" onclick="openEventModal(\'' + ev.id + '\')">Voir les détails</a>'
+            );
+
+            eventMarker.addTo(eventsLayer);
         });
 
-        Promise.all(pending).then(function () {
-            eventsResolved = true;
-            renderActionsPanel();
-        });
-    }
-
-    var eventsToggleBtn = document.getElementById("events-toggle-btn");
-    if (eventsToggleBtn) {
-        eventsToggleBtn.addEventListener("click", function () {
-            eventsVisible = !eventsVisible;
-            if (eventsVisible) {
-                map.addLayer(eventsLayer);
-                eventsToggleBtn.classList.add("is-on");
-                eventsToggleBtn.setAttribute("aria-pressed", "true");
-                eventsToggleBtn.textContent = "Masquer";
-            } else {
-                map.removeLayer(eventsLayer);
-                eventsToggleBtn.classList.remove("is-on");
-                eventsToggleBtn.setAttribute("aria-pressed", "false");
-                eventsToggleBtn.textContent = "Afficher";
-            }
-            renderActionsPanel();
-        });
-    }
-
-    function openEventModal(id) {
-        var ev = CMHA_EVENTS.find(function (e) { return e.id === id; });
-        if (!ev) return;
-        var type = EVENT_TYPES[detectEventType(ev.title)];
-        var online = isEventOnline(ev);
-        var actionPopulaireBlock = ev.actionPopulaireLink
-            ? '<p><strong>Lien Action Populaire pour indiquer participation :</strong> <a href="' + ev.actionPopulaireLink + '" target="_blank" rel="noopener">' + ev.actionPopulaireLink + '</a></p>'
-            : "";
-        var descriptionBlock = ev.description
-            ? '<p class="modal-description">' + ev.description + '</p>'
-            : "";
-        var linkBlock = ev.link
-            ? '<a class="btn-order" href="' + ev.link + '" target="_blank" rel="noopener">Plus d\'infos</a>'
-            : "";
-        document.getElementById("event-modal-body").innerHTML =
-            '<div class="agenda-event-icon" style="background-color:' + type.color + '22;color:' + type.color + ';margin-bottom:15px;">' + type.icon + '</div>' +
-            '<h2 style="margin-top:0;">' + ev.title + '</h2>' +
-            eventBadge(ev) +
-            '<p style="margin-top:20px;"><strong>Date :</strong> ' + formatEventDate(ev) + '</p>' +
-            '<p><strong>Lieu :</strong> ' + (online ? "En ligne (visioconférence)" : (ev.location || "À confirmer")) + '</p>' +
-            descriptionBlock +
-            actionPopulaireBlock +
-            linkBlock;
-        document.getElementById("event-modal").style.display = "flex";
-    }
-
-    function closeEventModal() {
-        document.getElementById("event-modal").style.display = "none";
-    }
-
-    document.addEventListener("click", function (event) {
-        var modal = document.getElementById("event-modal");
-        if (modal && event.target === modal) closeEventModal();
+        pending.push(task);
     });
 
-    document.addEventListener("cmha-events-ready", buildEventMarkers);
+    Promise.all(pending).then(function() {
+        eventsResolved = true;
+        renderActionsPanel();
+    });
+}
+
+var eventsToggleBtn = document.getElementById("events-toggle-btn");
+
+if (eventsToggleBtn) {
+    eventsToggleBtn.addEventListener("click", function() {
+        eventsVisible = !eventsVisible;
+
+        if (eventsVisible) {
+            map.addLayer(eventsLayer);
+            eventsToggleBtn.classList.add("is-on");
+            eventsToggleBtn.setAttribute("aria-pressed", "true");
+            eventsToggleBtn.textContent = "Masquer";
+        } else {
+            map.removeLayer(eventsLayer);
+            eventsToggleBtn.classList.remove("is-on");
+            eventsToggleBtn.setAttribute("aria-pressed", "false");
+            eventsToggleBtn.textContent = "Afficher";
+        }
+
+        renderActionsPanel();
+    });
+}
+
+function openEventModal(id) {
+    var ev = CMHA_EVENTS.find(function(e) {
+        return e.id === id;
+    });
+
+    if (!ev) {
+        return;
+    }
+
+    var type = EVENT_TYPES[detectEventType(ev.title)];
+    var online = isEventOnline(ev);
+
+    var actionPopulaireBlock = ev.actionPopulaireLink
+        ? '<p><strong>Lien Action Populaire pour indiquer participation :</strong> <a href="' + ev.actionPopulaireLink + '" target="_blank" rel="noopener">' + ev.actionPopulaireLink + '</a></p>'
+        : "";
+
+    var descriptionBlock = ev.description
+        ? '<p class="modal-description">' + ev.description + '</p>'
+        : "";
+
+    var linkBlock = ev.link
+        ? '<a class="btn-order" href="' + ev.link + '" target="_blank" rel="noopener">Plus d\'infos</a>'
+        : "";
+
+    document.getElementById("event-modal-body").innerHTML =
+        '<div class="agenda-event-icon" style="background-color:' + type.color + '22;color:' + type.color + ';margin-bottom:15px;">' + type.icon + '</div>' +
+        '<h2 style="margin-top:0;">' + ev.title + '</h2>' +
+        eventBadge(ev) +
+        '<p style="margin-top:20px;"><strong>Date :</strong> ' + formatEventDate(ev) + '</p>' +
+        '<p><strong>Lieu :</strong> ' + (online ? "En ligne (visioconférence)" : (ev.location || "À confirmer")) + '</p>' +
+        descriptionBlock +
+        actionPopulaireBlock +
+        linkBlock;
+
+    document.getElementById("event-modal").style.display = "flex";
+}
+
+function closeEventModal() {
+    document.getElementById("event-modal").style.display = "none";
+}
+
+document.addEventListener("click", function(event) {
+    var modal = document.getElementById("event-modal");
+
+    if (modal && event.target === modal) {
+        closeEventModal();
+    }
+});
+
+document.addEventListener("cmha-events-ready", buildEventMarkers);
 </script>
+
 </body>
 </html>
