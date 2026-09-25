@@ -1,4 +1,3 @@
-
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
@@ -160,31 +159,36 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 var colomiersIcon = L.icon({
     iconUrl: 'assets/logocolomiers.png',
     iconSize: [40, 40],
-    iconAnchor: [20, 20]
+    iconAnchor: [20, 20],
+    popupAnchor: [0, -20]
 });
 
 var legeuvinIcon = L.icon({
     iconUrl: 'assets/logolegeuvin.png',
     iconSize: [40, 40],
-    iconAnchor: [20, 20]
+    iconAnchor: [20, 20],
+    popupAnchor: [0, -20]
 });
 
 var fiIcon = L.icon({
     iconUrl: 'assets/FILeguevin.png',
     iconSize: [40, 40],
-    iconAnchor: [20, 20]
+    iconAnchor: [20, 20],
+    popupAnchor: [0, -20]
 });
 
 var rennesIcon = L.icon({
     iconUrl: 'assets/logorennes.png',
     iconSize: [40, 40],
-    iconAnchor: [20, 20]
+    iconAnchor: [20, 20],
+    popupAnchor: [0, -20]
 });
 
 var carIcon = L.icon({
     iconUrl: 'car.png',
-    iconSize: [40, 40],
-    iconAnchor: [20, 20]
+    iconSize: [50, 50],
+    iconAnchor: [25, 25],
+    popupAnchor: [0, -25]
 });
 
 var colomiersMarker = L.marker([43.612, 1.332], {
@@ -211,7 +215,7 @@ var fiMarker = L.marker([43.5991301, 1.2347784], {
 
 fiMarker.bindPopup(
     '<b>Groupe FI Léguevin-Brax-Pibrac</b><br>' +
-    '<a href="#FI-Details" onclick="showAlliesLayer()">Voir détails</a>'
+    '<a href="#FI-Details">Voir détails</a>'
 );
 
 var rennesMarker = L.marker([48.1173, -1.6778], {
@@ -224,7 +228,8 @@ rennesMarker.bindPopup(
 );
 
 var carMarker = L.marker([48.278334, -3.567223], {
-    icon: carIcon
+    icon: carIcon,
+    zIndexOffset: 1000
 }).addTo(map);
 
 carMarker.bindPopup(
@@ -520,3 +525,4 @@ document.addEventListener("cmha-events-ready", buildEventMarkers);
 
 </body>
 </html>
+
