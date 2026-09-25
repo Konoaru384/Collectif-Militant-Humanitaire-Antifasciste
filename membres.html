@@ -88,6 +88,22 @@
                 </p>
             </div>
         </div>
+
+<div class="collectif-details" id="Carhaix-details">
+        <div class="collectif-info">
+            <img src="car.png" alt="Logo Carhaix-Plouguer" class="collectif-logo">
+
+            <div class="collectif-details-text">
+                <h2 style="margin-top:0;">Carhaix-Plouguer</h2>
+                <h3 style="color:#5f6368;">Collectif Militant Humanitaire Antifasciste - Carhaix-Plouguer</h3>
+
+                <p><strong>Description :</strong> Collectif CMHA actif à Carhaix-Plouguer</p>
+
+                <p><strong>Réseaux et infos :</strong>
+                (bientôt)
+                </p>
+            </div>
+        </div>
     </div>
 
     <h2 style="text-align:center;">Groupes alliés / En collaboration</h2>
@@ -155,7 +171,12 @@ var rennesIcon = L.icon({
     iconAnchor: [20, 20]
 });
 
-
+var carIcon = L.icon({
+    iconUrl: 'Car.png',
+    iconSize: [40, 40],
+    iconAnchor: [20, 20]
+});
+    
 var colomiersMarker = L.marker([43.612, 1.332], {icon: colomiersIcon}).addTo(map);
 colomiersMarker.bindPopup('<b>Collectif CMHA - Colomiers</b><br><a href="#colomiers-details">Voir détails</a>');
 
@@ -167,6 +188,9 @@ fiMarker.bindPopup('<b>Groupe FI Léguevin-Brax-Pibrac</b><br><a href="#FI-Detai
 
 var rennesMarker = L.marker([48.1173, -1.6778], {icon: rennesIcon}).addTo(map);
 rennesMarker.bindPopup('<b>Collectif CMHA - Rennes</b><br><a href="#rennes-details">Voir détails</a>');
+
+var CarMarker = L.marker([48.278334, -3.567223], {icon: carIcon}).addTo(map);
+carMarker.bindPopup('<b>Collectif CMHA - Carhaix-Plouguer</b><br><a href="#rennes-details">Voir détails</a>');
 
 
     var alliesLayer = L.layerGroup();
